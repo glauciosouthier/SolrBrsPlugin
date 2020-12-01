@@ -19,32 +19,32 @@ package com.o19s.solr.swan;
 
 public class JsonStubSwanSearcher implements ISwanSearcher<String> {
 
-	@Override
+	//@Override
 	public String or(String a, String b) {
 		return "{\"OR\":[" + a + "," + b + "]}";
 	}
 	
-	@Override
+	//@Override
 	public String xor(String a, String b) {
 		return "{\"XOR\":[" + a + "," + b + "]}";
 	}
 	
-	@Override
+	//@Override
 	public String and(String a, String b) {
 		return "{\"AND\":[" + a + "," + b + "]}";
 	}
 
-	@Override
+	//@Override
 	public String same(String a, String b, int n) {
 		return "{\"SAME\":[" + a + "," + b + "," + n + "]}";
 	}
 
-	@Override
+	//@Override
 	public String with(String a, String b, int n) {
 		return "{\"WITH\":[" + a + "," + b + "," + n + "]}";
 	}
 
-	@Override
+	//@Override
 	public String near(String a, String b, int n) {
 		return "{\"NEAR\":[" + a + "," + b + "," + n + "]}";
 	}
@@ -54,7 +54,7 @@ public class JsonStubSwanSearcher implements ISwanSearcher<String> {
 		return "{\"ADJ\":[" + a + "," + b + "," + n + "]}";
 	}
 
-    @Override
+    //@Override
     public String not(String a, String b) {
         return "{\"NOT\":[" + a + "," + b + "]}";
     }
@@ -106,4 +106,39 @@ public class JsonStubSwanSearcher implements ISwanSearcher<String> {
   public String fieldedSubExpressions(String field, String expression) {
 	return "{\"FIELDED_EXPRESSION\":{\"field\":\"" + field + "\", \"exp\":" + expression + "}}";
   }
+
+@Override
+public String mesmo(String a, String b, int n) {
+	return "{\"MESMO\":[" + a + "," + b + "," + n + "]}";
+}
+
+@Override
+public String prox(String a, String b, int n) {
+	return "{\"PROX\":[" + a + "," + b + "," + n + "]}";
+}
+
+@Override
+public String e(String a, String b) {
+	return "{\"E\":[" + a + "," + b + "]}";
+}
+
+@Override
+public String ou(String a, String b) {
+	return "{\"OU\":[" + a + "," + b + "]}";
+}
+
+@Override
+public String xou(String a, String b) {
+	return "{\"XOU\":[" + a + "," + b + "]}";
+}
+
+@Override
+public String com(String a, String b, int n) {
+	return "{\"COM\":[" + a + "," + b + "," + n + "]}";
+}
+
+@Override
+public String nao(String a, String b) {
+	 return "{\"NAO\":[" + a + "," + b + "]}";
+}
 }

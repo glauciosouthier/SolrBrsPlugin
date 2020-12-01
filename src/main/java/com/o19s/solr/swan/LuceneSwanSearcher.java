@@ -24,214 +24,286 @@ import org.apache.solr.common.params.SolrParams;
 
 import com.google.common.collect.ListMultimap;
 import com.o19s.solr.swan.nodes.SwanAdjNode;
-import com.o19s.solr.swan.nodes.SwanAndOperationNode;
-import com.o19s.solr.swan.nodes.SwanNearNode;
+import com.o19s.solr.swan.nodes.SwanCOMNode;
+import com.o19s.solr.swan.nodes.SwanEOperationNode;
+import com.o19s.solr.swan.nodes.SwanMesmoNode;
+import com.o19s.solr.swan.nodes.SwanNAONode;
 import com.o19s.solr.swan.nodes.SwanNode;
-import com.o19s.solr.swan.nodes.SwanNotNode;
+import com.o19s.solr.swan.nodes.SwanOUOperationNode;
 import com.o19s.solr.swan.nodes.SwanOperatorNode;
-import com.o19s.solr.swan.nodes.SwanOrOperationNode;
+import com.o19s.solr.swan.nodes.SwanPROXNode;
 import com.o19s.solr.swan.nodes.SwanPhraseNode;
 import com.o19s.solr.swan.nodes.SwanRangeNode;
-import com.o19s.solr.swan.nodes.SwanSameNode;
 import com.o19s.solr.swan.nodes.SwanTermNode;
-import com.o19s.solr.swan.nodes.SwanWithNode;
-import com.o19s.solr.swan.nodes.SwanXOrOperationNode;
+import com.o19s.solr.swan.nodes.SwanXOUOperationNode;
 
 public class LuceneSwanSearcher implements ISwanSearcher<SwanNode> {
 
-  private static String defaultOp = "adj";
-  private static String stemSuffix = "_stem";
-  private ListMultimap<String, String> _fieldAliases;
+	private static String defaultOp = "adj";
+	private static String stemSuffix = "_stem";
+	private ListMultimap<String, String> _fieldAliases;
 
-  public LuceneSwanSearcher(SolrParams params, ListMultimap<String, String> fieldAliases) {
-	_fieldAliases = fieldAliases;
-    SwanNode.setParams(params);
-    String defOpStr = params.get("q.op");
-    if(defOpStr != null) {
-      defaultOp = defOpStr.toLowerCase();
-    }
-  }
+	public LuceneSwanSearcher(SolrParams params, ListMultimap<String, String> fieldAliases) {
+		_fieldAliases = fieldAliases;
+		SwanNode.setParams(params);
+		String defOpStr = params.get("q.op");
+		if (defOpStr != null) {
+			defaultOp = defOpStr.toLowerCase();
+		}
+	}
 
-  @Override
-  public SwanNode or(SwanNode left, SwanNode right) {
-    // This clause says if left is an OR condition, add right as an additional
-    // OR in the same scope.
-    // example if left = (X OR Y), and right = (Z), we will return (X OR Y OR Z)
-    // If left or right have different fields, they should fall out of this and 
-    // result in (X OR Y) OR (Z) so the different fields can be used
-    if (left instanceof SwanOrOperationNode
-        && nodesAreUnfieldedOrHaveSameFields(left.getField(), right.getField())){
-      ((SwanOrOperationNode) left).add(right);
-      return left;
-    }
-    return new SwanOrOperationNode(left,right);
-  }
+	/*@Override
+	public SwanNode or(SwanNode left, SwanNode right) {
+		// This clause says if left is an OR condition, add right as an additional
+		// OR in the same scope.
+		// example if left = (X OR Y), and right = (Z), we will return (X OR Y OR Z)
+		// If left or right have different fields, they should fall out of this and
+		// result in (X OR Y) OR (Z) so the different fields can be used
+		if (left instanceof SwanOrOperationNode
+				&& nodesAreUnfieldedOrHaveSameFields(left.getField(), right.getField())) {
+			((SwanOrOperationNode) left).add(right);
+			return left;
+		}
 
-  @Override
-  public SwanNode xor(SwanNode left, SwanNode right) {
-    if (left instanceof SwanXOrOperationNode && !left.isWrapped()) {
-      ((SwanXOrOperationNode) left).add(right);
-      return left;
-    }
-    return new SwanXOrOperationNode(left,right);
-  }
+		return new SwanOrOperationNode(left, right);
+	}
 
-  @Override
-  public SwanNode and(SwanNode left, SwanNode right) {
-    if (left instanceof SwanAndOperationNode) {
-      ((SwanAndOperationNode) left).add(right);
-      return left;
-    }
-    return new SwanAndOperationNode(left, right);
-  }
+	@Override
+	public SwanNode xor(SwanNode left, SwanNode right) {
+		if (left instanceof SwanXOrOperationNode && !left.isWrapped()) {
+			((SwanXOrOperationNode) left).add(right);
+			return left;
+		}
+		return new SwanXOrOperationNode(left, right);
+	}
 
-  @Override
-  public SwanNode same(SwanNode left, SwanNode right, int n) {
-    return new SwanSameNode(left,right,n);
-  }
+	@Override
+	public SwanNode and(SwanNode left, SwanNode right) {
+		if (left instanceof SwanAndOperationNode) {
+			((SwanAndOperationNode) left).add(right);
+			return left;
+		}
+		return new SwanAndOperationNode(left, right);
+	}
 
-  @Override
-  public SwanNode with(SwanNode left, SwanNode right, int n) {
-    return new SwanWithNode(left,right,n);
-  }
+	@Override
+	public SwanNode same(SwanNode left, SwanNode right, int n) {
+		return new SwanSameNode(left, right, n);
+	}
 
-  @Override
-  public SwanNode near(SwanNode left, SwanNode right, int n) {
-    return new SwanNearNode(left, right, n);
-  }
+	@Override
+	public SwanNode with(SwanNode left, SwanNode right, int n) {
+		return new SwanWithNode(left, right, n);
+	}
 
-  @Override
-  public SwanNode adj(SwanNode left, SwanNode right, int n) {
-    return new SwanAdjNode(left, right, n);
-  }
+	@Override
+	public SwanNode near(SwanNode left, SwanNode right, int n) {
+		return new SwanNearNode(left, right, n);
+	}
+*/
+	@Override
+	public SwanNode adj(SwanNode left, SwanNode right, int n) {
+		return new SwanAdjNode(left, right, n);
+	}
 
-  @Override
-  public SwanNode defaultOp(SwanNode left, SwanNode right) {
-    Class[] unamenableToSwan = new Class[] { SwanRangeNode.class };
-    boolean swanSafe = true;
-    for(Class c : unamenableToSwan) {
-      if((c == left.getClass()) || (c == right.getClass())) {
-        swanSafe = false;
-        break;
-      }
-    }
-    // TODO: Figure out what this is for
+	@Override
+	public SwanNode defaultOp(SwanNode left, SwanNode right) {
+		Class[] unamenableToSwan = new Class[] { SwanRangeNode.class };
+		boolean swanSafe = true;
+		for (Class c : unamenableToSwan) {
+			if ((c == left.getClass()) || (c == right.getClass())) {
+				swanSafe = false;
+				break;
+			}
+		}
+		// TODO: Figure out what this is for
 //		System.out.println("In LSS.dO, "+ left.getClass() +" --- "+ right.getClass() );
-    if(defaultOp.equals("same") && swanSafe) {
-      return same(left, right, 1);
-    } else if(defaultOp.equals("with") && swanSafe) {
-      return with(left, right, 1);
-    } else if(defaultOp.equals("adj") && swanSafe) {
-      return adj(left, right, 1);
-    } else if(defaultOp.equals("near") && swanSafe) {
-      return near(left, right, 1);
-    } else if(defaultOp.equals("and") || !swanSafe) { //<-- defaults to AND if not swanSafe
-      return and(left, right);
-    } else if(defaultOp.equals("or")) {
-      return or(left, right);
-    } else {
-      throw new UnsupportedOperationException("Default operator may only be on of SAME, WITH, ADJ, NEAR, AND, OR. Was suplied with "+ defaultOp);
-    }
-  }
-
-  @Override
-  public SwanNode not(SwanNode left, SwanNode right) {
-    return new SwanNotNode(left, right);
-  }
-
-  @Override
-  public SwanNode term(String match) {
-    return new SwanTermNode(match);
-  }
-
-  @Override
-  public SwanNode phrase(String match) {
-    return new SwanPhraseNode(match);
-  }
-
-  @Override
-  public SwanNode range(String field, String op1, String val1) {
-      if (_fieldAliases.containsKey(field.toLowerCase())) {
-          return new SwanRangeNode(_fieldAliases.get(field.toLowerCase()).get(0), op1, val1);
-      }
-      return new SwanRangeNode(field, op1, val1);
-  }
-
-  @Override
-	public SwanNode classRange(String field, String mainClassification, String subClassification1, String subClassification2) {
-		  return new SwanRangeNode(field, ">=", mainClassification + "/" + subClassification1, "<=", mainClassification + "/" + subClassification2);		  
-	}
-
-  @Override
-  public SwanNode boundRange(String field, String op1, String val1, String op2, String val2) {
-    if (_fieldAliases.containsKey(field.toLowerCase())) {
-        return new SwanRangeNode(_fieldAliases.get(field.toLowerCase()).get(0), op1, val1, op2, val2);
-    }
-    return new SwanRangeNode(field, op1, val1, op2, val2);
-  }
-
-  @Override
-  public SwanNode fieldedSubExpressions(String field, SwanNode expression){
-	  if (expression instanceof SwanOperatorNode) {
-	    for(SwanNode node : ((SwanOperatorNode)expression).getNodes()){
-		  fieldedSubExpressions(field, node);
-	    }
-      } else {
-		 fieldedExpression(field, expression);
-      }
-	  return expression;
-  }
-  
-  @Override
-  public SwanNode fieldedExpression(String field, SwanNode expression) {
-	field = field.toLowerCase();
-      if(SwanNode.isFieldStemming()) {
-          field = field.concat(stemSuffix);
-      }
-
-	if (_fieldAliases.containsKey(field)) {
-		try{
-	      return getFieldAliasExpression(_fieldAliases.get(field), expression);
+		//if (defaultOp.equals("same") && swanSafe) {
+			//return same(left, right, 1);
+		//} else 
+		if (defaultOp.equals("mesmo") && swanSafe) {
+			return mesmo(left, right, 1);
 		}
-		catch (Exception ex){
-					//need to do something here.  Log? pass the exception on?
+		//else if (defaultOp.equals("with") && swanSafe) {
+			//return with(left, right, 1);
+		//}
+		else if (defaultOp.equals("com") && swanSafe) {
+			return com(left, right, 1);
+		} else if (defaultOp.equals("adj") && swanSafe) {
+			return adj(left, right, 1);
+		} 
+		//else if (defaultOp.equals("near") && swanSafe) {
+			//return near(left, right, 1);
+		//} 
+		else if (defaultOp.equals("prox") && swanSafe) {
+			return prox(left, right, 1);
+		} 
+		//else if (defaultOp.equals("and") || !swanSafe) { // <-- defaults to AND if not swanSafe
+			//return and(left, right);
+		//} 
+		else if (defaultOp.equals("e") || !swanSafe) { 
+			return e(left, right);
+		} 
+		//else if (defaultOp.equals("or")) {
+			//return or(left, right);
+		//}  
+		else if (defaultOp.equals("ou")) {
+			return ou(left, right);
+		} else {
+			throw new UnsupportedOperationException(
+					"Default operator may only be on of SAME, WITH, ADJ, NEAR, AND, OR. Was suplied with " + defaultOp);
 		}
 	}
-    expression.setField(field);
-    return expression;
-  }
-  
-  private SwanNode getFieldAliasExpression(List<String> fields, SwanNode originalExpression) throws IllegalArgumentException, SecurityException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException{
-	  if (fields.size() == 1){
-		  originalExpression.setField(fields.get(0));
-		  return originalExpression;
-	  }
-	  //set up 'or' conditions between all of the fields if there are more than one
-	  SwanNode aggregatedExpression = null;
-	  for (String field : fields) {
-		  if (field !=  null){
-			  //use copy constructor to make a copy of the original expression
-			  SwanNode newExpression = originalExpression.getClass().getConstructor(originalExpression.getClass()).newInstance(originalExpression);
-			  newExpression.setField(field);
-			  if (aggregatedExpression != null){
-				  aggregatedExpression = or(aggregatedExpression, newExpression);
-			  }
-			  else{
-				  aggregatedExpression = newExpression;
-			  }
-		  }
-	  }	  
-	  return aggregatedExpression;
-  }
-  
-  private boolean nodesAreUnfieldedOrHaveSameFields(String firstField, String secondField){
-      return ((StringUtils.isBlank(firstField) || StringUtils.isBlank(secondField)) 
-               || (StringUtils.equals(firstField, secondField)));
-     }
 
-  @Override
-  public SwanNode wrap(SwanNode peek) {
-    peek.setWrapped();
-    return peek;
-  }
+
+
+	@Override
+	public SwanNode term(String match) {
+		return new SwanTermNode(match);
+	}
+
+	@Override
+	public SwanNode phrase(String match) {
+		return new SwanPhraseNode(match);
+	}
+
+	@Override
+	public SwanNode range(String field, String op1, String val1) {
+		if (_fieldAliases.containsKey(field.toLowerCase())) {
+			return new SwanRangeNode(_fieldAliases.get(field.toLowerCase()).get(0), op1, val1);
+		}
+		return new SwanRangeNode(field, op1, val1);
+	}
+
+	@Override
+	public SwanNode classRange(String field, String mainClassification, String subClassification1,
+			String subClassification2) {
+		return new SwanRangeNode(field, ">=", mainClassification + "/" + subClassification1, "<=",
+				mainClassification + "/" + subClassification2);
+	}
+
+	@Override
+	public SwanNode boundRange(String field, String op1, String val1, String op2, String val2) {
+		if (_fieldAliases.containsKey(field.toLowerCase())) {
+			return new SwanRangeNode(_fieldAliases.get(field.toLowerCase()).get(0), op1, val1, op2, val2);
+		}
+		return new SwanRangeNode(field, op1, val1, op2, val2);
+	}
+
+	@Override
+	public SwanNode fieldedSubExpressions(String field, SwanNode expression) {
+		if (expression instanceof SwanOperatorNode) {
+			for (SwanNode node : ((SwanOperatorNode) expression).getNodes()) {
+				fieldedSubExpressions(field, node);
+			}
+		} else {
+			fieldedExpression(field, expression);
+		}
+		return expression;
+	}
+
+	@Override
+	public SwanNode fieldedExpression(String field, SwanNode expression) {
+		field = field.toLowerCase();
+		if (SwanNode.isFieldStemming()) {
+			field = field.concat(stemSuffix);
+		}
+
+		if (_fieldAliases.containsKey(field)) {
+			try {
+				return getFieldAliasExpression(_fieldAliases.get(field), expression);
+			} catch (Exception ex) {
+				// need to do something here. Log? pass the exception on?
+			}
+		}
+		expression.setField(field);
+		return expression;
+	}
+
+	private SwanNode getFieldAliasExpression(List<String> fields, SwanNode originalExpression)
+			throws IllegalArgumentException, SecurityException, InstantiationException, IllegalAccessException,
+			InvocationTargetException, NoSuchMethodException {
+		if (fields.size() == 1) {
+			originalExpression.setField(fields.get(0));
+			return originalExpression;
+		}
+		// set up 'or' conditions between all of the fields if there are more than one
+		SwanNode aggregatedExpression = null;
+		for (String field : fields) {
+			if (field != null) {
+				// use copy constructor to make a copy of the original expression
+				SwanNode newExpression = originalExpression.getClass().getConstructor(originalExpression.getClass())
+						.newInstance(originalExpression);
+				newExpression.setField(field);
+				if (aggregatedExpression != null) {
+					//TODO: verificar ou / or
+					aggregatedExpression = ou(aggregatedExpression, newExpression);
+				} else {
+					aggregatedExpression = newExpression;
+				}
+			}
+		}
+		return aggregatedExpression;
+	}
+
+	private boolean nodesAreUnfieldedOrHaveSameFields(String firstField, String secondField) {
+		return ((StringUtils.isBlank(firstField) || StringUtils.isBlank(secondField))
+				|| (StringUtils.equals(firstField, secondField)));
+	}
+
+	@Override
+	public SwanNode wrap(SwanNode peek) {
+		peek.setWrapped();
+		return peek;
+	}
+
+	@Override
+	public SwanNode mesmo(SwanNode left, SwanNode right, int n) {
+		return new SwanMesmoNode(left, right, n);
+	}
+
+	@Override
+	public SwanNode prox(SwanNode left, SwanNode right, int n) {
+		return new SwanPROXNode(left, right, n);
+	}
+
+	@Override
+	public SwanNode e(SwanNode left, SwanNode right) {
+		if (left instanceof SwanEOperationNode) {
+			((SwanEOperationNode) left).add(right);
+			return left;
+		}
+		return new SwanEOperationNode(left, right);
+	}
+
+	@Override
+	public SwanNode xou(SwanNode left, SwanNode right) {
+		if (left instanceof SwanXOUOperationNode && !left.isWrapped()) {
+			((SwanXOUOperationNode) left).add(right);
+			return left;
+		}
+		return new SwanXOUOperationNode(left, right);
+	}
+
+	@Override
+	public SwanNode com(SwanNode left, SwanNode right, int n) {
+		return new SwanCOMNode(left, right, n);
+	}
+
+	@Override
+	public SwanNode nao(SwanNode left, SwanNode right) {
+		return new SwanNAONode(left, right);
+	}
+
+	@Override
+	public SwanNode ou(SwanNode left, SwanNode right) {
+		if (left instanceof SwanOUOperationNode
+				&& nodesAreUnfieldedOrHaveSameFields(left.getField(), right.getField())) {
+			((SwanOUOperationNode) left).add(right);
+			return left;
+		}
+
+		return new SwanOUOperationNode(left, right);
+	}
+
 }

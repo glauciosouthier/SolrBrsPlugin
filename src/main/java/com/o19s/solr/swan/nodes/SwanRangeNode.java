@@ -156,7 +156,7 @@ public class SwanRangeNode extends SwanNode {
         termNode.setSchema(schema);
         return termNode.getQuery();
       case NOT_EQUAL:
-        SwanOrOperationNode node = new SwanOrOperationNode(new SwanRangeNode(_field, "<", value), new SwanRangeNode(_field, ">", value));
+        SwanOUOperationNode node = new SwanOUOperationNode(new SwanRangeNode(_field, "<", value), new SwanRangeNode(_field, ">", value));
         node.setSchema(schema);
         return node.getQuery();
 
