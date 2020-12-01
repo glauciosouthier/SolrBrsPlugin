@@ -35,8 +35,8 @@
        that you fully re-index after changing this setting as it can
        affect both how text is indexed and queried.
   -->
-  <luceneMatchVersion>8.4.1</luceneMatchVersion>
-
+  <luceneMatchVersion>8.7.0</luceneMatchVersion>
+<instanceDir>/mnt/sda1/opt/solr-8.7.0</instanceDir>
   <!-- <lib/> directives can be used to instruct Solr to load any Jars
        identified and use them to resolve any "plugins" specified in
        your solrconfig.xml or schema.xml (ie: Analyzers, Request
