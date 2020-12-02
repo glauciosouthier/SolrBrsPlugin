@@ -2,19 +2,26 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
    
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.o19s.solr.swan</groupId>
-    <artifactId>SwanParser</artifactId>
+    <groupId>br.jus.cjf.brs</groupId>
+    <artifactId>BrsParser</artifactId>
     <packaging>jar</packaging>
     <version>1.0-SNAPSHOT</version>
-    <description>osc version 1.3.2</description>
-    <name>SwanParser</name>
-    <url>http://maven.apache.org</url>
 	<properties>
 		<java.version>1.8</java.version>
 		<solr.version>8.7.0</solr.version>
 	</properties>
+	    <repositories>
+        <repository>
+            <id>apache.snapshots</id>
+            <name>Apache Snapshot Repository</name>
+            <url>http://repository.apache.org/snapshots</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+    </repositories>
     <build>
-        <finalName>SwanParser</finalName>
+        <finalName>BrsParser</finalName>
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -174,17 +181,7 @@
             </plugin>
         </plugins>
     </build>
-    <repositories>
-        <repository>
-            <id>apache.snapshots</id>
-            <name>Apache Snapshot Repository</name>
-            <url>http://repository.apache.org/snapshots</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-        </repository>
-        
-    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>org.slf4j</groupId>

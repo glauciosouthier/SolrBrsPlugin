@@ -724,23 +724,14 @@
 
     -->
 
-  <!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work -->
-  <!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work -->
-  <!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work -->
-  <!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work -->
-  <!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work -->
-  <!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work -->
-  <!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work -->
-  <!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work -->
-  <!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work -->
-  <!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work -->
-  <queryParser name="swan" class="com.o19s.solr.swan.SwanQParserPlugin">
+  <!-- Brs Solr Work -->
+   <queryParser name="brs" class="br.jus.brs.BrsQParserPlugin">
     <str name="fieldAliases">fieldAliases.txt</str>
   </queryParser>
 
-  <requestHandler name="swan" class="solr.SearchHandler">
+  <requestHandler name="brs" class="solr.SearchHandler">
     <lst name="defaults">
-      <str name="defType">swan</str>
+      <str name="defType">brs</str>
       <str name="hl.highlightMultiTerm">true</str>
       <str name="hl.fragsize">200</str>
       <str name="hl.useFastVectorHighlighter">true</str>
@@ -756,9 +747,9 @@
   </requestHandler>
 <!--
   <searchComponent class="solr.HighlightComponent" name="highlight">
-    <highlighting class="com.o19s.solr.swan.highlight.SwanHighlighter">
+    <highlighting class="br.jus.brs.BrsHighlighter">
 -->
-  <searchComponent class="com.o19s.solr.swan.highlight.SwanHighlightComponent" name="highlight">
+  <searchComponent class="br.jus.brs.BrsHighlightComponent" name="highlight">
     <highlighting>
       <!--<highlighting class="org.apache.solr.highlight.DefaultSolrHighlighter">-->
       <!--<highlighting class="org.apache.solr.highlight.PostingsSolrHighlighter">-->
@@ -794,7 +785,7 @@
 
       <!-- Configure the standard encoder -->
       <encoder name="html" class="solr.highlight.HtmlEncoder" default="true"/>
-      <encoder name="html_striper" class="com.o19s.solr.swan.highlight.HtmlStriperEncoder" default="true"/>
+      <encoder name="html_striper" class="br.jus.brs.BrsHtmlStriperEncoder" default="true"/>
       <encoder name="default" class="solr.highlight.DefaultEncoder" />
 
       <!-- Configure the standard fragListBuilder -->
@@ -846,19 +837,7 @@
   <requestHandler name="/standard" class="solr.StandardRequestHandler">
     <bool name="httpCaching">true</bool>
   </requestHandler>
-  <!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work -->
-  <!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work -->
-  <!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work -->
-  <!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work -->
-  <!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work -->
-  <!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work -->
-  <!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work -->
-  <!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work -->
-  <!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work -->
-  <!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work -->
-  <!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work -->
-  <!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work --><!-- SolrSwan Work -->
-
+ 
   <!-- SearchHandler
 
        http://wiki.apache.org/solr/SearchHandler
@@ -1323,8 +1302,8 @@
   -->
 
   <!-- Term Vector Component http://wiki.apache.org/solr/TermVectorComponent -->
-  <!-- <searchComponent name="thComponent" class="com.o19s.solr.swan.TermHighlightComponent"/> -->
-  <searchComponent name="thSwanComponent" class="com.o19s.solr.swan.TermHighlightComponent"/>
+  <!-- <searchComponent name="thComponent" class="br.jus.brs.BrsTermHighlightComponent"/> -->
+  <searchComponent name="thBrsComponent" class="br.jus.brs.BrsTermHighlightComponent"/>
 
 
   <!-- A request handler for demonstrating the _term vector component This
@@ -1333,7 +1312,7 @@
   <requestHandler name="/tvrh" class="solr.SearchHandler"
                   startup="lazy">
     <lst name="defaults">
-      <str name="defType">swan</str>
+      <str name="defType">brs</str>
       <str name="qf">fruit</str>
       <str name="sm">xxxsentencexxx</str>
       <str name="pm">xxxparagraphxxx</str>
@@ -1341,7 +1320,7 @@
       <str name="fl">fruit</str>
     </lst>
     <arr name="last-components">
-      <str>thSwanComponent</str>
+      <str>thBrsComponent</str>
     </arr>
   </requestHandler>
 

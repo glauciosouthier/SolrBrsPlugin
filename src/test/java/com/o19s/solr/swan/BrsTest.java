@@ -118,7 +118,7 @@ public class BrsTest extends SolrTestCaseJ4 {
 	}
 	
 	 private void test(String q,int numFound) {
-		    assertQ(req("qt","swan",
+		    assertQ(req("qt","brs",
 		      "debugQuery", "true",
 		      "q",q,
 		      "qf","x, y, z",
@@ -136,7 +136,7 @@ public class BrsTest extends SolrTestCaseJ4 {
 		args.put("pm", "xxxparagraphxxx");
 		args.put("debugQuery", "true");
 		// args.put("q.op", "adj");
-		TestHarness.LocalRequestFactory sumLRF = h.getRequestFactory("swan", 0, 200, args);
+		TestHarness.LocalRequestFactory sumLRF = h.getRequestFactory("brs", 0, 200, args);
 		return sumLRF.makeRequest(q);
 	}
 	@Ignore
