@@ -31,7 +31,7 @@ public class SwanCOMNode extends SwanProxNode {
 
 	  @Override
 	  public String toString() {
-	    return "COM("+ _left +","+ _right + "," + _proximity + ")";
+			return "COM(" + _left + "," + _right + /* "," + _proximity + */")";
 	  }
 
 	}

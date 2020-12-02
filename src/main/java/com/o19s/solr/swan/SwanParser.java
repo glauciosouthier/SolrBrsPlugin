@@ -34,57 +34,55 @@ import org.parboiled.support.Var;
  */
 @BuildParseTree
 public class SwanParser<V> extends BaseParser<V> {
-	
+
 	public Rule Query() {
 		return Sequence(OuExpression(), EOI);
 	}
-/*
-	public Rule OrExpression() {
-		return Sequence(XorExpression(),
-				ZeroOrMore(Sequence(FirstOf(OR(), OR_SYMBOL()), XorExpression(), push(searcher.or(pop(1), pop())))));
-	}*/
+	/*
+	 * public Rule OrExpression() { return Sequence(XorExpression(),
+	 * ZeroOrMore(Sequence(FirstOf(OR(), OR_SYMBOL()), XorExpression(),
+	 * push(searcher.or(pop(1), pop()))))); }
+	 */
 
 	public Rule OuExpression() {
 		return Sequence(XouExpression(),
 				ZeroOrMore(Sequence(FirstOf(OU(), OR_SYMBOL()), XouExpression(), push(searcher.ou(pop(1), pop())))));
 	}
-/*
-	public Rule XorExpression() {
-		return Sequence(AndExpression(),
-				ZeroOrMore(Sequence(XOR(), AndExpression(), push(searcher.xor(pop(1), pop())))));
-	}*/
+	/*
+	 * public Rule XorExpression() { return Sequence(AndExpression(),
+	 * ZeroOrMore(Sequence(XOR(), AndExpression(), push(searcher.xor(pop(1),
+	 * pop()))))); }
+	 */
 
 	public Rule XouExpression() {
 		return Sequence(EExpression(), ZeroOrMore(Sequence(XOU(), EExpression(), push(searcher.xou(pop(1), pop())))));
 	}
-/*
-	public Rule AndExpression() {
-		return Sequence(SameExpression(), ZeroOrMore(
-				Sequence(FirstOf(AND(), AND_SYMBOL()), SameExpression(), push(searcher.and(pop(1), pop())))));
-	}*/
+	/*
+	 * public Rule AndExpression() { return Sequence(SameExpression(), ZeroOrMore(
+	 * Sequence(FirstOf(AND(), AND_SYMBOL()), SameExpression(),
+	 * push(searcher.and(pop(1), pop()))))); }
+	 */
 
 	public Rule EExpression() {
 		return Sequence(MesmoExpression(),
 				ZeroOrMore(Sequence(FirstOf(E(), AND_SYMBOL()), MesmoExpression(), push(searcher.e(pop(1), pop())))));
 	}
-/*
-	public Rule SameExpression() {
-		Var<Integer> n = new Var<Integer>();
-		return Sequence(WithExpression(),
-				ZeroOrMore(Sequence(SAME(n), WithExpression(), push(searcher.same(pop(1), pop(), n.get())))));
-	}*/
+	/*
+	 * public Rule SameExpression() { Var<Integer> n = new Var<Integer>(); return
+	 * Sequence(WithExpression(), ZeroOrMore(Sequence(SAME(n), WithExpression(),
+	 * push(searcher.same(pop(1), pop(), n.get()))))); }
+	 */
 
 	public Rule MesmoExpression() {
 		Var<Integer> n = new Var<Integer>();
 		return Sequence(ComExpression(),
 				ZeroOrMore(Sequence(MESMO(n), ComExpression(), push(searcher.mesmo(pop(1), pop(), n.get())))));
 	}
-/*
-	public Rule WithExpression() {
-		Var<Integer> n = new Var<Integer>();
-		return Sequence(AdjNearExpression(),
-				ZeroOrMore(Sequence(WITH(n), AdjNearExpression(), push(searcher.with(pop(1), pop(), n.get())))));
-	}*/
+	/*
+	 * public Rule WithExpression() { Var<Integer> n = new Var<Integer>(); return
+	 * Sequence(AdjNearExpression(), ZeroOrMore(Sequence(WITH(n),
+	 * AdjNearExpression(), push(searcher.with(pop(1), pop(), n.get()))))); }
+	 */
 
 	public Rule ComExpression() {
 		Var<Integer> n = new Var<Integer>();
@@ -92,13 +90,14 @@ public class SwanParser<V> extends BaseParser<V> {
 				ZeroOrMore(Sequence(COM(n), AdjProxExpression(), push(searcher.com(pop(1), pop(), n.get())))));
 	}
 
-	/*public Rule AdjNearExpression() {
-		Var<Integer> n = new Var<Integer>();
-		return Sequence(NotExpression(),
-				ZeroOrMore(FirstOf(Sequence(NEAR(n), NotExpression(), push(searcher.near(pop(1), pop(), n.get()))),
-						Sequence(ADJ(n), NotExpression(), push(searcher.adj(pop(1), pop(), n.get()))),
-						Sequence(DEFAULT_OPERATOR(), NotExpression(), push(searcher.defaultOp(pop(1), pop()))))));
-	}*/
+	/*
+	 * public Rule AdjNearExpression() { Var<Integer> n = new Var<Integer>(); return
+	 * Sequence(NotExpression(), ZeroOrMore(FirstOf(Sequence(NEAR(n),
+	 * NotExpression(), push(searcher.near(pop(1), pop(), n.get()))),
+	 * Sequence(ADJ(n), NotExpression(), push(searcher.adj(pop(1), pop(),
+	 * n.get()))), Sequence(DEFAULT_OPERATOR(), NotExpression(),
+	 * push(searcher.defaultOp(pop(1), pop())))))); }
+	 */
 
 	public Rule AdjProxExpression() {
 		Var<Integer> n = new Var<Integer>();
@@ -107,11 +106,11 @@ public class SwanParser<V> extends BaseParser<V> {
 						Sequence(ADJ(n), NaoExpression(), push(searcher.adj(pop(1), pop(), n.get()))),
 						Sequence(DEFAULT_OPERATOR(), NaoExpression(), push(searcher.defaultOp(pop(1), pop()))))));
 	}
-/*
-	public Rule NotExpression() {
-		return FirstOf(Sequence(Clause(), NOT(), Clause(), push(searcher.not(pop(1), pop()))), ClassificationOr(),
-				Clause());
-	}*/
+	/*
+	 * public Rule NotExpression() { return FirstOf(Sequence(Clause(), NOT(),
+	 * Clause(), push(searcher.not(pop(1), pop()))), ClassificationOr(), Clause());
+	 * }
+	 */
 
 	public Rule NaoExpression() {
 		return FirstOf(Sequence(Clause(), NAO(), Clause(), push(searcher.nao(pop(1), pop()))), ClassificationOU(),
@@ -120,30 +119,30 @@ public class SwanParser<V> extends BaseParser<V> {
 
 	// this is the high level rule to define a classification range
 	// an example would look like this (123/456-789,11,800-900).range.
-	/*public Rule ClassificationOr() {
-		StringVar mainClassification = new StringVar();
-		StringVar subClassification1 = new StringVar();
-		StringVar subClassification2 = new StringVar();
-		StringVar n = new StringVar();
-		return Sequence(Optional("("), OptionalWhiteSpace(), WordCharNoDashes(), mainClassification.set(match()),
-				OptionalWhiteSpace(), "/", OptionalWhiteSpace(),
-				FirstOf(PushDashRange(mainClassification, subClassification1, subClassification2),
-						PushWordNoDashes(mainClassification)),
-				ZeroOrMore(OptionalWhiteSpace(), ",", OptionalWhiteSpace(),
-						FirstOf(PushOrWithRange(mainClassification, subClassification1, subClassification2),
-								PushOrWithFloatDigits(mainClassification))),
-				OptionalWhiteSpace(),
-				ZeroOrMore(OneOrMore(AnyOf(";")), WordCharNoDashes(), mainClassification.set(match()),
-						OptionalWhiteSpace(), "/", OptionalWhiteSpace(),
-						FirstOf(PushOrWithRange(mainClassification, subClassification1, subClassification2),
-								PushOrWithFloatDigits(mainClassification)),
-						ZeroOrMore(OptionalWhiteSpace(), ",", OptionalWhiteSpace(),
-								FirstOf(PushOrWithRange(mainClassification, subClassification1, subClassification2),
-										PushOrWithFloatDigits(mainClassification))),
-						OptionalWhiteSpace()),
-				Optional(")"), DotField(n), push(searcher.fieldedSubExpressions(n.get(), pop())), Test(EOI));
-	}*/
-	
+	/*
+	 * public Rule ClassificationOr() { StringVar mainClassification = new
+	 * StringVar(); StringVar subClassification1 = new StringVar(); StringVar
+	 * subClassification2 = new StringVar(); StringVar n = new StringVar(); return
+	 * Sequence(Optional("("), OptionalWhiteSpace(), WordCharNoDashes(),
+	 * mainClassification.set(match()), OptionalWhiteSpace(), "/",
+	 * OptionalWhiteSpace(), FirstOf(PushDashRange(mainClassification,
+	 * subClassification1, subClassification2),
+	 * PushWordNoDashes(mainClassification)), ZeroOrMore(OptionalWhiteSpace(), ",",
+	 * OptionalWhiteSpace(), FirstOf(PushOrWithRange(mainClassification,
+	 * subClassification1, subClassification2),
+	 * PushOrWithFloatDigits(mainClassification))), OptionalWhiteSpace(),
+	 * ZeroOrMore(OneOrMore(AnyOf(";")), WordCharNoDashes(),
+	 * mainClassification.set(match()), OptionalWhiteSpace(), "/",
+	 * OptionalWhiteSpace(), FirstOf(PushOrWithRange(mainClassification,
+	 * subClassification1, subClassification2),
+	 * PushOrWithFloatDigits(mainClassification)), ZeroOrMore(OptionalWhiteSpace(),
+	 * ",", OptionalWhiteSpace(), FirstOf(PushOrWithRange(mainClassification,
+	 * subClassification1, subClassification2),
+	 * PushOrWithFloatDigits(mainClassification))), OptionalWhiteSpace()),
+	 * Optional(")"), DotField(n), push(searcher.fieldedSubExpressions(n.get(),
+	 * pop())), Test(EOI)); }
+	 */
+
 	public Rule ClassificationOU() {
 		StringVar mainClassification = new StringVar();
 		StringVar subClassification1 = new StringVar();
@@ -167,7 +166,7 @@ public class SwanParser<V> extends BaseParser<V> {
 						OptionalWhiteSpace()),
 				Optional(")"), DotField(n), push(searcher.fieldedSubExpressions(n.get(), pop())), Test(EOI));
 	}
-	
+
 	public Rule DashRange(StringVar subClassification1, StringVar subClassification2) {
 		return Sequence(WordCharNoDashes(), subClassification1.set(match()), OptionalWhiteSpace(), "-",
 				OptionalWhiteSpace(), WordCharNoDashes(), subClassification2.set(match()));
@@ -183,22 +182,24 @@ public class SwanParser<V> extends BaseParser<V> {
 	public Rule PushWordNoDashes(StringVar mainClassification) {
 		return Sequence(WordCharNoDashes(), push(searcher.term(mainClassification.get() + "/" + match())));
 	}
-/*
-	public Rule PushOrWithRange(StringVar mainClassification, StringVar subClassification1,
-			StringVar subClassification2) {
-		return Sequence(DashRange(subClassification1, subClassification2), push(searcher.or(pop(), searcher
-				.classRange(null, mainClassification.get(), subClassification1.get(), subClassification2.get()))));
-	}*/
+	/*
+	 * public Rule PushOrWithRange(StringVar mainClassification, StringVar
+	 * subClassification1, StringVar subClassification2) { return
+	 * Sequence(DashRange(subClassification1, subClassification2),
+	 * push(searcher.or(pop(), searcher .classRange(null, mainClassification.get(),
+	 * subClassification1.get(), subClassification2.get())))); }
+	 */
 
 	public Rule PushOuWithRange(StringVar mainClassification, StringVar subClassification1,
 			StringVar subClassification2) {
 		return Sequence(DashRange(subClassification1, subClassification2), push(searcher.ou(pop(), searcher
 				.classRange(null, mainClassification.get(), subClassification1.get(), subClassification2.get()))));
 	}
-/*
-	public Rule PushOrWithFloatDigits(StringVar mainClassification) {
-		return Sequence(FloatChar(), push(searcher.or(pop(), searcher.term(mainClassification.get() + "/" + match()))));
-	}*/
+	/*
+	 * public Rule PushOrWithFloatDigits(StringVar mainClassification) { return
+	 * Sequence(FloatChar(), push(searcher.or(pop(),
+	 * searcher.term(mainClassification.get() + "/" + match())))); }
+	 */
 
 	public Rule PushOuWithFloatDigits(StringVar mainClassification) {
 		return Sequence(FloatChar(), push(searcher.ou(pop(), searcher.term(mainClassification.get() + "/" + match()))));
@@ -306,9 +307,9 @@ public class SwanParser<V> extends BaseParser<V> {
 	}
 
 	//////////////////////////////////////////////////
-	public Rule OR() {
-		return Sequence(IgnoreCase("OR"), CharAfterOp());
-	}
+	// public Rule OR() {
+	// return Sequence(IgnoreCase("OR"), CharAfterOp());
+	// }
 
 	public Rule OU() {
 		return Sequence(IgnoreCase("OU"), CharAfterOp());
@@ -318,17 +319,17 @@ public class SwanParser<V> extends BaseParser<V> {
 		return Sequence("|", OptionalWhiteSpace());
 	}
 
-	public Rule XOR() {
-		return Sequence(IgnoreCase("XOR"), CharAfterOp());
-	}
+	// public Rule XOR() {
+	// return Sequence(IgnoreCase("XOR"), CharAfterOp());
+	// }
 
 	public Rule XOU() {
 		return Sequence(IgnoreCase("XOU"), CharAfterOp());
 	}
 
-	public Rule AND() {
-		return Sequence(IgnoreCase("AND"), CharAfterOp());
-	}
+	// public Rule AND() {
+	// return Sequence(IgnoreCase("AND"), CharAfterOp());
+	// }
 
 	public Rule E() {
 		return Sequence(IgnoreCase("E"), CharAfterOp());
@@ -338,30 +339,33 @@ public class SwanParser<V> extends BaseParser<V> {
 		return Sequence("&", OptionalWhiteSpace());
 	}
 
-	public Rule SAME(Var<Integer> n) {
-		return Sequence(IgnoreCase("SAME"), OptionalDigits(), n.set(Integer.parseInt(matchOrDefault("1"))),
-				CharAfterOp());
-	}
+	// public Rule SAME(Var<Integer> n) {
+	// return Sequence(IgnoreCase("SAME"), OptionalDigits(),
+	// n.set(Integer.parseInt(matchOrDefault("1"))),
+	// CharAfterOp());
+	// }
 
 	public Rule MESMO(Var<Integer> n) {
 		return Sequence(IgnoreCase("MESMO"), OptionalDigits(), n.set(Integer.parseInt(matchOrDefault("1"))),
 				CharAfterOp());
 	}
 
-	public Rule WITH(Var<Integer> n) {
-		return Sequence(IgnoreCase("WITH"), OptionalDigits(), n.set(Integer.parseInt(matchOrDefault("1"))),
-				CharAfterOp());
-	}
+	// public Rule WITH(Var<Integer> n) {
+	// return Sequence(IgnoreCase("WITH"), OptionalDigits(),
+	// n.set(Integer.parseInt(matchOrDefault("1"))),
+	// CharAfterOp());
+	// }
 
 	public Rule COM(Var<Integer> n) {
 		return Sequence(IgnoreCase("COM"), OptionalDigits(), n.set(Integer.parseInt(matchOrDefault("1"))),
 				CharAfterOp());
 	}
 
-	public Rule NEAR(Var<Integer> n) {
-		return Sequence(IgnoreCase("NEAR"), OptionalDigits(), n.set(Integer.parseInt(matchOrDefault("1"))),
-				CharAfterOp());
-	}
+	// public Rule NEAR(Var<Integer> n) {
+	// return Sequence(IgnoreCase("NEAR"), OptionalDigits(),
+	// n.set(Integer.parseInt(matchOrDefault("1"))),
+	// CharAfterOp());
+	// }
 
 	public Rule PROX(Var<Integer> n) {
 		return Sequence(IgnoreCase("PROX"), OptionalDigits(), n.set(Integer.parseInt(matchOrDefault("1"))),
@@ -373,9 +377,9 @@ public class SwanParser<V> extends BaseParser<V> {
 				CharAfterOp());
 	}
 
-	public Rule NOT() {
-		return Sequence(IgnoreCase("NOT"), WhiteSpace());
-	}
+	// public Rule NOT() {
+	// return Sequence(IgnoreCase("NOT"), WhiteSpace());
+	// }
 
 	public Rule NAO() {
 		return Sequence(IgnoreCase("NAO"), WhiteSpace());
@@ -388,11 +392,10 @@ public class SwanParser<V> extends BaseParser<V> {
 	}
 
 	public Rule DEFAULT_OPERATOR() {
-		return TestNot(FirstOf(OR(), OU(), XOR(), XOU(), AND(), E(), SAME(new Var<Integer>()),
-				MESMO(new Var<Integer>()), WITH(new Var<Integer>()), COM(new Var<Integer>()), NEAR(new Var<Integer>()),
-				PROX(new Var<Integer>()), ADJ(new Var<Integer>())
 		// NOT() <-- should never be included in DEFAULT_OPERATOR b/c a unary operator
 		// should never be default - ALSO it causes an infinite _parser loop
+		return TestNot(FirstOf(OU(), XOU(), E(), MESMO(new Var<Integer>()), COM(new Var<Integer>()),
+				PROX(new Var<Integer>()), ADJ(new Var<Integer>())
 		));
 	}
 
@@ -424,4 +427,5 @@ public class SwanParser<V> extends BaseParser<V> {
 //
 //		System.out.println(printNodeTree(result));
 //	}
+	
 }

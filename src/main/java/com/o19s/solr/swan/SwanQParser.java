@@ -66,7 +66,7 @@ public class SwanQParser extends QParser {
 
 		if (query.toString().equals(""))
 			throw new IllegalArgumentException("Invalid Query");
-		System.out.println(query);
+		//System.out.println(query);
 		return query;
 	}
 

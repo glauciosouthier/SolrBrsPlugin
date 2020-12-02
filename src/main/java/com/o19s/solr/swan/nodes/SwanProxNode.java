@@ -137,8 +137,7 @@ public abstract class SwanProxNode extends SwanNode {
 		
 		if(_right instanceof SwanXOUOperationNode  ) {
 			return singleXOrConditionalQuery(_left, _right, true);
-		}
-		else
+		}else
 			return singleConditionalQuery(_right, _left, true);
 	}
 
@@ -326,11 +325,11 @@ public abstract class SwanProxNode extends SwanNode {
 	private void addSpanQuery(BooleanQuery.Builder queryBuilder, BooleanClause.Occur occur, SwanNode left,
 			SwanNode right, String field) {
 		if (field == null) {
-			if (occur.equals(BooleanClause.Occur.SHOULD))
+			if (occur.equals(BooleanClause.Occur.SHOULD)) {
 				// Optimize OR queries, don't require nesting
 				for (String _f : defaultFields)
 					queryBuilder.add(getSpanQuery(left, right, _f), BooleanClause.Occur.SHOULD);
-			else {
+			}else {
 				BooleanQuery.Builder qb = new BooleanQuery.Builder();
 				for (String _f : defaultFields)
 					qb.add(getSpanQuery(left, right, _f), BooleanClause.Occur.SHOULD);
