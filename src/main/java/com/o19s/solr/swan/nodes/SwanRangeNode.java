@@ -23,6 +23,8 @@ import org.apache.lucene.util.BytesRef;
 import org.apache.solr.schema.DatePointField;
 import org.apache.solr.schema.TrieDateField;
 
+import brs.parser.nodes.SwanOUOperationNode;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;

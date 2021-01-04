@@ -25,6 +25,8 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.spans.SpanQuery;
 import org.apache.solr.schema.IndexSchema;
 
+import brs.parser.nodes.SwanXOUOperationNode;
+
 public abstract class SwanProxNode extends SwanNode {
 
 	protected SwanNode _left;

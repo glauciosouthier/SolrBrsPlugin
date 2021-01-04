@@ -24,18 +24,19 @@ import org.apache.solr.common.params.SolrParams;
 
 import com.google.common.collect.ListMultimap;
 import com.o19s.solr.swan.nodes.SwanAdjNode;
-import com.o19s.solr.swan.nodes.SwanCOMNode;
-import com.o19s.solr.swan.nodes.SwanEOperationNode;
-import com.o19s.solr.swan.nodes.SwanMesmoNode;
-import com.o19s.solr.swan.nodes.SwanNAONode;
 import com.o19s.solr.swan.nodes.SwanNode;
-import com.o19s.solr.swan.nodes.SwanOUOperationNode;
 import com.o19s.solr.swan.nodes.SwanOperatorNode;
-import com.o19s.solr.swan.nodes.SwanPROXNode;
 import com.o19s.solr.swan.nodes.SwanPhraseNode;
 import com.o19s.solr.swan.nodes.SwanRangeNode;
 import com.o19s.solr.swan.nodes.SwanTermNode;
-import com.o19s.solr.swan.nodes.SwanXOUOperationNode;
+
+import brs.parser.nodes.SwanCOMNode;
+import brs.parser.nodes.SwanEOperationNode;
+import brs.parser.nodes.SwanMesmoNode;
+import brs.parser.nodes.SwanNAONode;
+import brs.parser.nodes.SwanOUOperationNode;
+import brs.parser.nodes.SwanPROXNode;
+import brs.parser.nodes.SwanXOUOperationNode;
 
 public class LuceneSwanSearcher implements ISwanSearcher<SwanNode> {
 
@@ -151,7 +152,7 @@ public class LuceneSwanSearcher implements ISwanSearcher<SwanNode> {
 			return ou(left, right);
 		} else {
 			throw new UnsupportedOperationException(
-					"Default operator may only be on of SAME, WITH, ADJ, NEAR, AND, OR. Was suplied with " + defaultOp);
+					"Default operator may only be on of MESMO, COM, ADJ, PROX, E, OU. Was suplied with " + defaultOp);
 		}
 	}
 
