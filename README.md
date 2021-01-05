@@ -29,7 +29,7 @@ mvn clean package  (optional: mvn deploy,  if the ulr and credentials of repo is
 
 the dependencies of SolrBrsPlugin wil be copied to solr/libs folder
 
-Optional: solr/docker-compose.yaml for testing in Docker container (sol/cloud/docker-compose.yaml for SolrCloud setup)
+Optional: solr/docker-compose.yaml for testing in Docker container (solr/cloud/docker-compose.yaml for SolrCloud setup)
 
 ```
 This will build the plugin jar. Packages will be in the solr/libs folder.
