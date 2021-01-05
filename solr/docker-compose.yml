@@ -1,0 +1,27 @@
+version: '3'
+services:
+  solr:
+   container_name: solr_juris  
+   build:
+      context: .
+      dockerfile: ./Dockerfile  
+   ports:
+    - "8983:8983"
+   networks:
+    - app-network
+   volumes:
+    - ./juris/:/mycores/juris:rw
+    - ./libs/:/mycores/juris/libs:rw
+    - data:/var/solr/
+   environment:
+   - SOLR_HEAP=4096m
+   command:
+    - solr-precreate
+    - juris
+    - /mycores/juris
+
+networks:
+  app-network:
+    driver: bridge
+volumes:
+   data:

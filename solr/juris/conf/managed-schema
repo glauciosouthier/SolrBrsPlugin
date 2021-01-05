@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<schema name="juris" version="1.5">
+
+	<types>
+
+		<fieldType name="string" class="solr.TextField"
+			sortMissingLast="true">
+			<analyzer>
+				<tokenizer class="solr.KeywordTokenizerFactory" />
+				<filter class="solr.LowerCaseFilterFactory" />
+			</analyzer>
+
+		</fieldType>
+
+		<fieldType name="text_ws" class="solr.TextField"
+			positionIncrementGap="100">
+			<analyzer>
+				<charFilter class="solr.PatternReplaceCharFilterFactory"
+					pattern="(&lt;(?:(?!&gt;).)*&gt;)\1" replacement=" $1 " />
+				<tokenizer class="solr.WhitespaceTokenizerFactory" />
+			</analyzer>
+		</fieldType>
+
+		<fieldType name="text_facets" class="solr.TextField"
+			positionIncrementGap="100">
+			<analyzer>
+				<!-- recognises e-mail addresses, urls, #-tags and @-mentions, alphanumeric 
+					words (possibly containing inner periods) -->
+				<tokenizer class="solr.PatternTokenizerFactory"
+					pattern="(?U)([\w-\.]+@[\w-\.]+)|(https?:\S+)|((\s|^)[@#]\w+)|(\w+(\.\w+)?)"
+					group="0" />
+				<!-- there might be tokens containing trailing/leading white spaces -->
+				<filter class="solr.TrimFilterFactory" />
+				<filter class="solr.LowerCaseFilterFactory" />
+				<filter class="solr.StopFilterFactory" format="snowball"
+					words="stopwords.txt" ignoreCase="true" />
+				<!-- kills urls -->
+				<filter class="solr.PatternReplaceFilterFactory"
+					pattern="(?U)https?:\S+" replacement="" />
+				<!-- kills numbers -->
+				<filter class="solr.PatternReplaceFilterFactory"
+					pattern="(?U)^[0-9.,']+$" replacement="" />
+				<!-- kills meaningless tokens -->
+				<filter class="solr.LengthFilterFactory" min="2" max="1024" />
+			</analyzer>
+		</fieldType>
+
+		<fieldtype name="text_facets_exact" class="solr.TextField"
+			positionIncrementGap="1000">
+			<analyzer>
+				<charFilter class="solr.MappingCharFilterFactory"
+					mapping="mapping-ISOLatin1Accent.txt" />
+				<charFilter class="solr.PatternReplaceCharFilterFactory"
+					pattern="\s+" replacement="_" />
+				<filter class="solr.TrimFilterFactory" />
+				<filter class="solr.LowerCaseFilterFactory" />
+				<filter class="solr.LengthFilterFactory" min="2" max="1024" />
+				<tokenizer class="solr.WhitespaceTokenizerFactory" />
+
+			</analyzer>
+		</fieldtype>
+
+		<fieldtype name="textNoStem" class="solr.TextField"
+			positionIncrementGap="100">
+			<analyzer type="index">
+				<tokenizer class="solr.WhitespaceTokenizerFactory" />
+				<filter class="solr.WordDelimiterFilterFactory"
+					generateWordParts="1" generateNumberParts="1" catenateWords="1"
+					catenateNumbers="1" catenateAll="0" splitOnCaseChange="1" />
+				<filter class="solr.LowerCaseFilterFactory" />
+				<filter class="solr.RemoveDuplicatesTokenFilterFactory" />
+			</analyzer>
+			<analyzer type="query">
+				<tokenizer class="solr.WhitespaceTokenizerFactory" />
+				<filter class="solr.WordDelimiterFilterFactory"
+					generateWordParts="1" generateNumberParts="1" catenateWords="0"
+					catenateNumbers="0" catenateAll="0" splitOnCaseChange="1" />
+				<filter class="solr.LowerCaseFilterFactory" />
+				<filter class="solr.RemoveDuplicatesTokenFilterFactory" />
+			</analyzer>
+		</fieldtype>
+
+		<!-- HTML based fields. -->
+		<fieldType name="html" class="solr.TextField"
+			positionIncrementGap="100">
+			<analyzer type="index">
+				<!-- find p h1 h2 h3 h4 h5 elements and add in paragraph token -->
+				<charFilter class="solr.PatternReplaceCharFilterFactory"
+					pattern="^|(&lt;(?:[pP]|[hH]\d)&gt;)"
+					replacement="$1 xxxparagraphxxx xxxsentencexxx " />
+				<!-- find pattern "[sentence ending punctuation][space][Cap letter or 
+					number] and replace punctuation with sentence token -->
+				<charFilter class="solr.PatternReplaceCharFilterFactory"
+					pattern="[.!?]\s+([A-Z0-9])" replacement=" xxxsentencexxx $1" />
+				<charFilter class="solr.HTMLStripCharFilterFactory" />
+				<tokenizer class="solr.StandardTokenizerFactory" />
+				<filter class="solr.LowerCaseFilterFactory" />
+			</analyzer>
+			<analyzer type="query">
+				<tokenizer class="solr.StandardTokenizerFactory" />
+				<filter class="solr.LowerCaseFilterFactory" />
+			</analyzer>
+		</fieldType>
+
+
+
+		<fieldType name="text_general" class="solr.TextField"
+			positionIncrementGap="100">
+
+			<analyzer type="index">
+				<!-- find p h1 h2 h3 h4 h5 elements an add in paragraph token -->
+				<charFilter class="solr.PatternReplaceCharFilterFactory"
+					pattern="^|(&lt;(?:[pP]|[hH]\d)&gt;)"
+					replacement="$1 xxxparagraphxxx xxxsentencexxx " />
+				<!-- find pattern "[sentence ending punctuation][space][Cap letter or 
+					number] and replace punctuation with sentence token -->
+				<charFilter class="solr.PatternReplaceCharFilterFactory"
+					pattern="[.!?]\s+([A-Z0-9])" replacement=" xxxsentencexxx $1" />
+				<tokenizer class="solr.StandardTokenizerFactory" />
+				<filter class="solr.TokenOffsetPayloadTokenFilterFactory" />
+				<filter class="solr.StopFilterFactory" ignoreCase="true"
+					words="stopwords.txt" />
+				<filter class="solr.LowerCaseFilterFactory" />
+			</analyzer>
+
+			<analyzer type="query">
+				<tokenizer class="solr.StandardTokenizerFactory" />
+				<filter class="solr.StopFilterFactory" ignoreCase="true"
+					words="stopwords.txt" />
+				<filter class="solr.SynonymFilterFactory"
+					synonyms="synonyms.txt" ignoreCase="true" expand="true" />
+				<filter class="solr.LowerCaseFilterFactory" />
+			</analyzer>
+		</fieldType>
+
+
+		<fieldType name="text_general_stem" class="solr.TextField"
+			positionIncrementGap="100">
+			<analyzer type="index">
+				<!-- find p h1 h2 h3 h4 h5 elements an add in paragraph token -->
+				<charFilter class="solr.PatternReplaceCharFilterFactory"
+					pattern="^|(&lt;(?:[pP]|[hH]\d)&gt;)"
+					replacement="$1 xxxparagraphxxx xxxsentencexxx " />
+				<!-- find pattern "[sentence ending punctuation][space][Cap letter or 
+					number] and replace punctuation with sentence token -->
+				<charFilter class="solr.PatternReplaceCharFilterFactory"
+					pattern="[.!?]\s+([A-Z0-9])" replacement=" xxxsentencexxx $1" />
+				<tokenizer class="solr.StandardTokenizerFactory" />
+				<filter class="solr.TokenOffsetPayloadTokenFilterFactory" />
+				<filter class="solr.StopFilterFactory" ignoreCase="true"
+					words="stopwords.txt" />
+				<!-- <filter class="solr.PorterStemFilterFactory"/> -->
+				<filter class="solr.LowerCaseFilterFactory" />
+				<filter class="solr.BrazilianStemFilterFactory" />
+			</analyzer>
+
+			<analyzer type="query">
+				<tokenizer class="solr.StandardTokenizerFactory" />
+				<filter class="solr.StopFilterFactory" ignoreCase="true"
+					words="stopwords.txt" />
+				<filter class="solr.SynonymFilterFactory"
+					synonyms="synonyms.txt" ignoreCase="true" expand="true" />
+				<!-- <filter class="solr.PorterStemFilterFactory"/> -->
+
+				<filter class="solr.LowerCaseFilterFactory" />
+				<filter class="solr.BrazilianStemFilterFactory" />
+			</analyzer>
+
+		</fieldType>
+		<fieldType name="long" class="solr.LongPointField"
+			docValues="true" />
+		<fieldType name="pint" class="solr.IntPointField"
+			docValues="true" />
+		<fieldType name="plong" class="solr.LongPointField"
+			docValues="true" />
+		<fieldType name="pfloat" class="solr.FloatPointField"
+			docValues="true" />
+		<fieldType name="pdouble" class="solr.DoublePointField"
+			docValues="true" />
+		<fieldType name="pdate" class="solr.DatePointField"
+			docValues="true" />
+
+		<!-- <fieldType name="double" class="solr.TrieDoubleField" precisionStep="1" 
+			omitNorms="true" positionIncrementGap="0"/> <fieldType name="date" class="solr.TrieDateField" 
+			omitNorms="true" precisionStep="1" positionIncrementGap="0"/> -->
+	</types>
+
+	<fields>
+		<field name="_version_" type="long" indexed="true" stored="true" />
+		<field name="last_modified" type="pdate" indexed="true"
+			stored="true" default="NOW" />
+		<field name="timestamp" type="long" indexed="true" stored="true" />
+		<field name="id" type="string" indexed="true" stored="true"
+			required="true" />
+		<field name="id_documento" type="string" indexed="true"
+			stored="true" required="true" />
+		<field name="docn" type="string" indexed="true" stored="true"
+			required="true" />
+
+		<field name="base" type="string" indexed="true" stored="true" />
+		<field name="tribunal" type="string" indexed="true"
+			stored="true" />
+		<field name="origem" type="string" indexed="true" stored="true" />
+
+		<field name="uf" type="string" indexed="true" stored="true" />
+		<field name="orgao_julgador" type="textNoStem" indexed="true"
+			stored="true" termVectors="true" termPositions="true"
+			termOffsets="true" required="false" />
+
+		<field name="processo_formatado" type="textNoStem"
+			indexed="true" stored="true" termVectors="true" termPositions="true"
+			termOffsets="true" required="false" />
+		<field name="processo" type="string" indexed="true"
+			stored="true" />
+
+		<field name="data_decisao" type="pdate" indexed="true"
+			stored="true" />
+		<field name="data_decisao_pesq" type="string" indexed="true"
+			stored="true" />
+		<field name="data_publicacao" type="pdate" indexed="true"
+			stored="true" />
+		<field name="data_publicacao_pesq" type="string" indexed="true"
+			stored="true" />
+		<field name="data_alteracao" type="pdate" indexed="true"
+			stored="true" />
+		<field name="data_alteracao_pesq" type="string" indexed="true"
+			stored="true" />
+
+		<field name="tipo_documento" type="textNoStem" indexed="true"
+			stored="true" />
+
+		<field name="classe" type="textNoStem" indexed="true"
+			stored="true" termVectors="true" termPositions="true"
+			termOffsets="true" required="false" />
+		<field name="sigla_classe" type="textNoStem" indexed="true"
+			stored="true" />
+
+		<field name="objeto_processo" type="text_general" indexed="true"
+			stored="true" termVectors="true" termPositions="true"
+			termOffsets="true" required="false" />
+		<field name="relator" type="text_general" indexed="true"
+			stored="true" termVectors="true" termPositions="true"
+			termOffsets="true" required="false" />
+		<field name="revisor" type="text_general" indexed="true"
+			stored="true" termVectors="true" termPositions="true"
+			termOffsets="true" required="false" />
+		<field name="relator_acordao" type="text_general" indexed="true"
+			stored="true" termVectors="true" termPositions="true"
+			termOffsets="true" required="false" />
+		<field name="relator_convocado" type="text_general"
+			indexed="true" stored="true" termVectors="true" termPositions="true"
+			termOffsets="true" required="false" />
+		<field name="relator_suplente" type="text_general"
+			indexed="true" stored="true" termVectors="true" termPositions="true"
+			termOffsets="true" required="false" />
+
+
+
+
+		<field name="ementa" type="text_general" indexed="true"
+			stored="true" termVectors="true" termPositions="true"
+			termOffsets="true" required="false" />
+		<field name="decisao" type="text_general" indexed="true"
+			stored="true" termVectors="true" termPositions="true"
+			termOffsets="true" required="false" />
+		<field name="decisao_stem" type="text_general_stem"
+			indexed="true" stored="true" termVectors="true" termPositions="true"
+			termOffsets="true" />
+		<field name="txt_origem" type="text_general" indexed="true"
+			stored="true" termVectors="true" termPositions="true"
+			termOffsets="true" required="false" />
+		<field name="inteiro_teor" type="text_general" indexed="true"
+			stored="true" termVectors="true" termPositions="true"
+			termOffsets="true" required="false" />
+		<field name="inteiro_teor_stem" type="text_general_stem"
+			indexed="true" stored="true" termVectors="true" termPositions="true"
+			termOffsets="true" />
+		<field name="link_inteiro_teor" type="string" indexed="true"
+			stored="true" />
+
+		<field name="precedentes" type="text_general" indexed="true"
+			stored="true" termVectors="true" termPositions="true"
+			termOffsets="true" required="false" />
+		<field name="sucessivos" type="text_general" indexed="true"
+			stored="true" termVectors="true" termPositions="true"
+			termOffsets="true" required="false" />
+		<field name="doutrina" type="text_general" indexed="true"
+			stored="true" termVectors="true" termPositions="true"
+			termOffsets="true" required="false" />
+		<field name="indexacao" type="text_general" indexed="true"
+			stored="true" termVectors="true" termPositions="true"
+			termOffsets="true" required="false" />
+		<field name="catalogo" type="text_general" indexed="true"
+			stored="true" termVectors="true" termPositions="true"
+			termOffsets="true" required="false" />
+		<field name="ref_legislativa" type="text_general" indexed="true"
+			stored="true" termVectors="true" termPositions="true"
+			termOffsets="true" required="false" />
+		<field name="outras_referencias" type="text_general"
+			indexed="true" stored="true" termVectors="true" termPositions="true"
+			termOffsets="true" required="false" />
+		<field name="observacoes" type="text_general" indexed="true"
+			stored="true" termVectors="true" termPositions="true"
+			termOffsets="true" required="false" />
+
+		<field name="fonte_publicacao" type="text_general"
+			indexed="true" stored="true" termVectors="true" termPositions="true"
+			termOffsets="true" required="false" />
+		<field name="outras_fontes" type="text_general" indexed="true"
+			stored="true" termVectors="true" termPositions="true"
+			termOffsets="true" required="false" />
+
+
+
+		<dynamicField name="*_facet" type="text_facets_exact"
+			indexed="true" stored="false" multiValued="true" />
+	</fields>
+
+	<uniqueKey>id</uniqueKey>
+	<copyField source="id" dest="id_documento" />
+	<copyField source="id" dest="docn" />
+	<copyField source="decisao" dest="decisao_stem" />
+	<copyField source="inteiro_teor" dest="inteiro_teor_stem" />
+
+	<copyField source="sigla_classe" dest="sigla_classe_facet" />
+	<copyField source="orgao_julgador"
+		dest="orgao_julgador_facet" />
+	<copyField source="tipo_documento"
+		dest="tipo_documento_facet" />
+	<copyField source="classe" dest="classe_facet" />
+</schema>
