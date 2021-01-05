@@ -7,16 +7,16 @@ SolrBrsPlugin
 
 SolrBrsPlugin is a fork of [SolrSwan](https://github.com/o19s/SolrSwan) changed for Portuguese operators.
 
-SolrBrsPlugin is a query parser and highlighter for Solr that accepts proximity and Boolean queries. The syntax is designed to be compatible with the search syntax of BR/Search (a discontinued product of OpenText Group). In addition to a changed fielded query syntax, the additional operators are:
+SolrBrsPlugin is a query parser and highlighter for Solr that accepts proximity and Boolean queries. The syntax is designed to be compatible with the search syntax of BRS Search. In addition to a changed fielded query syntax, the additional operators are:
 
-* Mesmo
-* Com
-* Adj
-* Prox
+* MESMO
+* COM
+* ADJ
+* PROX
 * XOU
 * E
 * OU
-* Nao
+* NAO
 
 Each operator takes an optional quantifier, such as "ADJ3", that restricts the range over which it operates. In order to make sense of paragraphs and sentences, the searched fields need to index special tokens that identify the breaks. The test schema has an example of how to do that with solr.PatternReplaceCharFilterFactory.
 
