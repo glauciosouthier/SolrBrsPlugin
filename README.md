@@ -27,7 +27,7 @@ SolrBrsPlugin uses Maven dependency management and Java 8. Once those are instal
 ```
 mvn clean package  (optional: mvn deploy,  if the ulr and credentials of repo is in settings.xml)
 
-the dependencies of SolrBrsPlugin wil be copied to solr/libs folder
+the dependencies of SolrBrsPlugin will be copied to solr/libs folder
 
 Optional: solr/docker-compose.yaml for testing in Docker container (solr/cloud/docker-compose.yaml for SolrCloud setup)
 
