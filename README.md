@@ -23,9 +23,14 @@ Each operator takes an optional quantifier, such as "ADJ3", that restricts the r
 The included highlighter is a modified version of the FastVectorHighlighter that is currently the default in Solr. It supports semantically accurate, multi-colored highlighting. (The Phrase highlighter in Solr supports the first, while FVH supports the second, but neither support both).
 
 # Building
-SolrBrsPlugin uses Maven dependency management and Java 7. Once those are installed, building the plugin JAR is done with:
+SolrBrsPlugin uses Maven dependency management and Java 8. Once those are installed, building the plugin JAR is done with:
 ```
-mvn package
+mvn clean package  (optional: mvn deploy,  if the ulr and credentials of repo is in settings.xml)
+
+the dependencies of Solr plugin wil be copied to solr/libs folder
+
+Optional: docker-compose.yaml for testing in Docker container (sol/cloud/docker-compose.yaml for SolrCloud setup)
+
 ```
 This will build both the plugin jar as well as a webapp that can be used to parse queries without executing them. Both packages will be in the ./target folder.
 
