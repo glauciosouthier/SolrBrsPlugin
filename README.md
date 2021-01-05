@@ -32,7 +32,7 @@ the dependencies of SolrBrsPlugin wil be copied to solr/libs folder
 Optional: solr/docker-compose.yaml for testing in Docker container (sol/cloud/docker-compose.yaml for SolrCloud setup)
 
 ```
-This will build both the plugin jar as well as a webapp that can be used to parse queries without executing them. Both packages will be in the ./target folder.
+This will build the plugin jar. Packages will be in the solr/libs folder.
 
 # Installation
 There are a few steps needed to get Swan syntax working in Solr. First, add the new jars to solrconfig.xml like:
