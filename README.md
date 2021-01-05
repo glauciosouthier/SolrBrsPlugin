@@ -88,13 +88,11 @@ ab,AB => abstract_html
 ```
 This will translate "device.ab." as a query for the term "device" over the abstract_html field. I don't remember at the moment whether or not the Swan field is still case-sensitive. Our whole fieldAliases.txt file looks like this:
 ```ruby
-pn,PN,did,DID => id
-pd,PD,isd,ISD => date_publ_i
-ab,AB => abstract_html
-ti,TI => invention_title
-bsum,BSUM,detd,DETD,spec,SPEC => description_html
-clm,CLM,clms,CLMS,dclm,DCLM => claims_html
-ccls,CCLS,clas,CLAS,ccor,CCOR => uspc_code_fmt
+rev => revisor
+rel => relator
+iteo, inte => inteiro_teor
+sigc => sigla_classe
+clas => classe
 ```
 Put that file alongside schema.xml and solrconfig.xml.
 
