@@ -35,7 +35,7 @@ Optional: solr/docker-compose.yaml for testing in Docker container (solr/cloud/d
 This will build the plugin jar. Packages will be in the solr/libs folder.
 
 # Installation
-There are a few steps needed to get Swan syntax working in Solr. First, add the new jars to solrconfig.xml like:
+There are a few steps needed to get Brs syntax working in Solr. First, add the new jars to solrconfig.xml like:
 ```xml
   <lib path="../../apache-solr-8.7.3/contrib/SolrBrsPlugin-1.0-SNAPSHOT.jar" />
   <lib path="../../apache-solr-8.7.3/contrib/parboiled-core-1.1.8.jar" />
