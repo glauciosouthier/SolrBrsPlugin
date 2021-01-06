@@ -37,10 +37,10 @@ This will build the plugin jar. Packages will be in the solr/libs folder.
 # Installation
 There are a few steps needed to get Brs syntax working in Solr. First, add the new jars to solrconfig.xml like:
 ```xml
-  <lib path="../../apache-solr-8.7.3/contrib/SolrBrsPlugin-1.0-SNAPSHOT.jar" />
-  <lib path="../../apache-solr-8.7.3/contrib/parboiled-core-1.1.8.jar" />
-  <lib path="../../apache-solr-8.7.3/contrib/parboiled-java-1.1.8.jar" />
-  <lib path="../../apache-solr-8.7.3/contrib/asm-all-5.2.jar" />
+  <lib path="../../apache-solr-8.7.0/contrib/SolrBrsPlugin-1.0-SNAPSHOT.jar" />
+  <lib path="../../apache-solr-8.7.0/contrib/parboiled-core-1.1.8.jar" />
+  <lib path="../../apache-solr-8.7.0/contrib/parboiled-java-1.1.8.jar" />
+  <lib path="../../apache-solr-8.7.0/contrib/asm-all-5.2.jar" />
 ```
 Then define the new query parser:
 ```xml
@@ -99,7 +99,7 @@ iteo, inte => inteiro_teor
 sigc => sigla_classe
 clas => classe
 ```
-Put that file alongside schema.xml and solrconfig.xml.
+Put that file alongside schema.xml (managed-schema) and solrconfig.xml.
 
 # BRS Operators
 
