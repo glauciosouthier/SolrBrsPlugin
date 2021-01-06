@@ -7,30 +7,35 @@ SolrBrsPlugin
 
 SolrBrsPlugin is a fork of [SolrSwan](https://github.com/o19s/SolrSwan) changed for Portuguese operators.
 
-SolrBrsPlugin is a query parser and highlighter for Solr that accepts proximity and Boolean queries. The syntax is designed to be compatible with the search syntax of BR/Search (a discontinued product of OpenText Group). In addition to a changed fielded query syntax, the additional operators are:
+SolrBrsPlugin is a query parser and highlighter for Solr that accepts proximity and Boolean queries. The syntax is designed to be compatible with the search syntax of BRS Search. In addition to a changed fielded query syntax, the additional operators are:
 
-* Mesmo
-* Com
-* Adj
-* Prox
+* MESMO
+* COM
+* ADJ
+* PROX
 * XOU
 * E
 * OU
-* Nao
+* NAO
 
 Each operator takes an optional quantifier, such as "ADJ3", that restricts the range over which it operates. In order to make sense of paragraphs and sentences, the searched fields need to index special tokens that identify the breaks. The test schema has an example of how to do that with solr.PatternReplaceCharFilterFactory.
 
 The included highlighter is a modified version of the FastVectorHighlighter that is currently the default in Solr. It supports semantically accurate, multi-colored highlighting. (The Phrase highlighter in Solr supports the first, while FVH supports the second, but neither support both).
 
 # Building
-SolrBrsPlugin uses Maven dependency management and Java 7. Once those are installed, building the plugin JAR is done with:
+SolrBrsPlugin uses Maven dependency management and Java 8. Once those are installed, building the plugin JAR is done with:
 ```
-mvn package
+mvn clean package  (optional: mvn deploy,  if the ulr and credentials of repo is in settings.xml)
+
+the dependencies of SolrBrsPlugin will be copied to solr/libs folder
+
+Optional: solr/docker-compose.yaml for testing in Docker container (solr/cloud/docker-compose.yaml for SolrCloud setup)
+
 ```
-This will build both the plugin jar as well as a webapp that can be used to parse queries without executing them. Both packages will be in the ./target folder.
+This will build the plugin jar. Packages will be in the solr/libs folder.
 
 # Installation
-There are a few steps needed to get Swan syntax working in Solr. First, add the new jars to solrconfig.xml like:
+There are a few steps needed to get Brs syntax working in Solr. First, add the new jars to solrconfig.xml like:
 ```xml
   <lib path="../../apache-solr-8.7.3/contrib/SolrBrsPlugin-1.0-SNAPSHOT.jar" />
   <lib path="../../apache-solr-8.7.3/contrib/parboiled-core-1.1.8.jar" />
@@ -86,15 +91,13 @@ Lastly, you need to create a text file that maps "dot" field aliases to the actu
 ```ruby
 ab,AB => abstract_html
 ```
-This will translate "device.ab." as a query for the term "device" over the abstract_html field. I don't remember at the moment whether or not the Swan field is still case-sensitive. Our whole fieldAliases.txt file looks like this:
+This will translate "device.ab." or "(device)[ab]" as a query for the term "device" over the abstract_html field.  Our whole fieldAliases.txt file looks like this:
 ```ruby
-pn,PN,did,DID => id
-pd,PD,isd,ISD => date_publ_i
-ab,AB => abstract_html
-ti,TI => invention_title
-bsum,BSUM,detd,DETD,spec,SPEC => description_html
-clm,CLM,clms,CLMS,dclm,DCLM => claims_html
-ccls,CCLS,clas,CLAS,ccor,CCOR => uspc_code_fmt
+rev => revisor
+rel => relator
+iteo, inte => inteiro_teor
+sigc => sigla_classe
+clas => classe
 ```
 Put that file alongside schema.xml and solrconfig.xml.
 
