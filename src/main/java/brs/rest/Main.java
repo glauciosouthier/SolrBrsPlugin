@@ -1,4 +1,4 @@
-package brs.rest;
+ package brs.rest;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -27,7 +27,7 @@ public class Main {
 		config.register(BrsController.class);
 		config.register(LoggingFilter.class);
 		HttpServer server = GrizzlyHttpServerFactory.createHttpServer(getURI(),
-				config,true);
+				config,false);
 		try {
 			server.start();
 			System.out.println("--Press Enter to STOP the server--");

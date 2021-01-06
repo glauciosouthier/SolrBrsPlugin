@@ -255,8 +255,6 @@
 			termOffsets="true" required="false" />
 
 
-
-
 		<field name="ementa" type="text_general" indexed="true"
 			stored="true" termVectors="true" termPositions="true"
 			termOffsets="true" required="false" />

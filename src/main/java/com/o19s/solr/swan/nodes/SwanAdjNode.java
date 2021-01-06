@@ -33,7 +33,7 @@ public class SwanAdjNode extends SwanProxNode {
   public SpanQuery getSpanQuery(SwanNode left, SwanNode right, String field) {
     return new SpanNearQuery(
         new SpanQuery[] { left.getSpanQuery(field), right.getSpanQuery(field) },
-        _proximity-1,
+        _proximity,
         true
     );
   }
