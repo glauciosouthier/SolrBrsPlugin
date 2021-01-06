@@ -18,32 +18,36 @@ public class BrsController {
 	private static final String DEFAULT_OPERATOR = "ou";
 	private static final String QUERY_FIELDS = "decisao,ementa,inteiro_teor";
 
+	/**
+	 * ex: http://localhost:8081/brs/toLucene?q=((habeas adj3 corpus) nao caixa)&qf=ementa
+	 * 
+	 * @param query
+	 * @param queryFields
+	 * @param defaultOperator
+	 * @return
+	 */
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/toLucene")
-	public String toLucene(@QueryParam("q")String query,@QueryParam("qf" )String queryFields, @QueryParam("q.op")String defaultOperator) {
-		HashMap<String,String> params= new HashMap<String,String>();
-		params.put("q.op", Strings.isBlank(defaultOperator)? DEFAULT_OPERATOR:defaultOperator);
-		params.put("sm","xxxsentencexxx");
-		params.put("pm","xxxparagraphxxx");
-		params.put("qf",Strings.isBlank(queryFields)?QUERY_FIELDS:queryFields);
+	public String toLucene(@QueryParam("q") String query, @QueryParam("qf") String queryFields,
+			@QueryParam("q.op") String defaultOperator) {
+		HashMap<String, String> params = new HashMap<String, String>();
+		params.put("q.op", Strings.isBlank(defaultOperator) ? DEFAULT_OPERATOR : defaultOperator);
+		params.put("sm", "xxxsentencexxx");
+		params.put("pm", "xxxparagraphxxx");
+		params.put("qf", Strings.isBlank(queryFields) ? QUERY_FIELDS : queryFields);
 
-		return UtilParse.parseLucene(query,params);
+		return UtilParse.parseLucene(query, params);
 	}
+
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/toJson")
-	public String toJson(@QueryParam("q")String query) {
+	public String toJson(@QueryParam("q") String query) {
 		return UtilParse.parseJson(query);
 	}
-	
-	
-	
-	
-	
 
-	
 }
