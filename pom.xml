@@ -15,8 +15,9 @@
 		<!-- configure repo url and server credentials in settings.xml -->
 		<repo></repo>
 		<solr.deps>solr/libs</solr.deps>
+		
 	</properties>
-	
+
 	<distributionManagement>
 		<repository>
 			<id>nexus-releases</id>
@@ -30,9 +31,23 @@
 
 	<build>
 		<finalName>${artifactId}</finalName>
+			<resources>
+			<resource>
+				<directory>${project.basedir}/src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+			<resource>
+				<directory>${project.basedir}/src/test/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>**/*</include>
+				</includes>
+				<targetPath>${project.build.testOutputDirectory}</targetPath>
+			</resource>
+		</resources>
 		<pluginManagement>
 			<plugins>
-				
+
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
 					<artifactId>lifecycle-mapping</artifactId>
@@ -73,6 +88,10 @@
 
 
 		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
 			<plugin>
 				<artifactId>maven-deploy-plugin</artifactId>
 				<version>2.8.1</version>
@@ -161,8 +180,8 @@
 				<artifactId>maven-jar-plugin</artifactId>
 				<version>3.2.0</version>
 			</plugin>
-			
-			
+
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
@@ -220,56 +239,26 @@
 					</execution>
 				</executions>
 			</plugin>
-			
+
 		</plugins>
 	</build>
 
 	<dependencies>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>1.6.6</version>
-		</dependency>
+
 		<dependency>
 			<groupId>org.parboiled</groupId>
 			<artifactId>parboiled-java</artifactId>
 			<version>1.1.8</version>
 		</dependency>
-
-		<dependency>
-			<groupId>org.scalatest</groupId>
-			<artifactId>scalatest_2.13</artifactId>
-			<version>3.2.0-M2</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.scala-lang</groupId>
-			<artifactId>scala-library</artifactId>
-			<version>2.13.1</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.solr</groupId>
-			<artifactId>solr-test-framework</artifactId>
-			<version>${solr.version}</version>
-			<type>jar</type>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.12</version>
-			<scope>test</scope>
-		</dependency>
-
-
 		<dependency>
 			<groupId>org.apache.lucene</groupId>
 			<artifactId>lucene-core</artifactId>
+			<version>${solr.version}</version>
+			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-highlighter</artifactId>
 			<version>${solr.version}</version>
 			<type>jar</type>
 		</dependency>
@@ -286,13 +275,29 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
+
+
+
 		<dependency>
-			<groupId>org.apache.lucene</groupId>
-			<artifactId>lucene-highlighter</artifactId>
+			<groupId>org.apache.solr</groupId>
+			<artifactId>solr-test-framework</artifactId>
 			<version>${solr.version}</version>
 			<type>jar</type>
+			<scope>test</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.7.24</version>
+			<scope>test</scope>
+		</dependency>
 
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -306,8 +311,36 @@
 			<version>2.0.8</version>
 			<scope>test</scope>
 		</dependency>
-		
+		<dependency>
+			<groupId>org.scalatest</groupId>
+			<artifactId>scalatest_2.13</artifactId>
+			<version>3.2.0-M2</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.scala-lang</groupId>
+			<artifactId>scala-library</artifactId>
+			<version>2.13.1</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.glassfish.jersey.containers</groupId>
+			<artifactId>jersey-container-grizzly2-http</artifactId>
+			<version>2.7</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.glassfish.jersey.media</groupId>
+			<artifactId>jersey-media-moxy</artifactId>
+			<version>2.7</version>
+		</dependency>
+
+
 	</dependencies>
 
-	
+
 </project>

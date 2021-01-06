@@ -1,21 +1,17 @@
 package brs.components;
 
+import java.nio.file.Paths;
 import java.util.HashMap;
 
 import org.apache.solr.SolrTestCaseJ4;
+import org.apache.solr.common.params.MapSolrParams;
 import org.apache.solr.request.LocalSolrQueryRequest;
 import org.apache.solr.util.TestHarness;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.parboiled.Parboiled;
-import org.parboiled.errors.ErrorUtils;
-import org.parboiled.parserunners.RecoveringParseRunner;
-import org.parboiled.support.ParseTreeUtils;
-import org.parboiled.support.ParsingResult;
 
-import com.o19s.solr.swan.StringStubSwanSearcher;
-import com.o19s.solr.swan.SwanParser;
+import com.google.common.collect.LinkedListMultimap;
+import com.google.common.collect.ListMultimap;
 
 public class BrsTest extends SolrTestCaseJ4 {
 	@BeforeClass
@@ -23,31 +19,67 @@ public class BrsTest extends SolrTestCaseJ4 {
 		initCore("solrconfig.xml", "schema.xml");
 	}
 
-	
+	//@Ignore
+		@Test
+		public void hardTest() {
+			String query = "((mobile PROX (unit$1 OU terminal)) OU (cellular PROX (telephone OU phone))) COM convave COM shap$1";
+			
+			ListMultimap<String, String> fieldAliases =LinkedListMultimap.create();
+			try {
+				fieldAliases = UtilParse.loadMap(Paths.get("src/test/resources/solr/collection1/conf/"), "fieldAliases.txt");
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+			fieldAliases.asMap().entrySet().stream().parallel().forEach(e -> {
+				 System.out.print( e.getKey() + e.getValue()+", ");
+			});
+			System.out.println();
+			HashMap<String,String> params= new HashMap<String,String>();
+			params.put("q.op", "and");
+			params.put("sm","xxxsentencexxx");
+			params.put("pm","xxxparagraphxxx");
+			params.put("qf","x, y");
+				
+			System.out.println(UtilParse.parseLucene(new MapSolrParams(params),h.getCore().getLatestSchema(),fieldAliases,query));
+			// System.out.println(ParseTreeUtils.printNodeTree(result));
 
+		}
+		
+		
 	@Test
 	public void testRangeQuery1() {
+		
+		
 		String input = "((mobile ADJ (unit$1 OU terminal)) OU (cellular ADJ (telephone OU phone))) COM convave COM shap$1";
-		//hardTest(input) ;
-		//test(input,0);
-		test(input, "spanWithin(spanNear([spanWithin(spanNear([spanOr([spanNear([x:mobile, spanOr([SpanMultiTermQueryWrapper(x:/unit.{0,1}/), x:terminal])], 0, true), spanNear([x:cellular, spanOr([x:telephone, x:phone])], 0, true)]), x:convave], 2147483647, false), 1 ,x:xxxsentencexxx), SpanMultiTermQueryWrapper(x:/shap.{0,1}/)], 2147483647, false), 1 ,x:xxxsentencexxx) spanWithin(spanNear([spanWithin(spanNear([spanOr([spanNear([y:mobile, spanOr([SpanMultiTermQueryWrapper(y:/unit.{0,1}/), y:terminal])], 0, true), spanNear([y:cellular, spanOr([y:telephone, y:phone])], 0, true)]), y:convave], 2147483647, false), 1 ,y:xxxsentencexxx), SpanMultiTermQueryWrapper(y:/shap.{0,1}/)], 2147483647, false), 1 ,y:xxxsentencexxx)");
+		// hardTest(input) ;
+		// test(input,0);
+		test(input,
+				"spanWithin(spanNear([spanWithin(spanNear([spanOr([spanNear([x:mobile, spanOr([SpanMultiTermQueryWrapper(x:/unit.{0,1}/), x:terminal])], 0, true), spanNear([x:cellular, spanOr([x:telephone, x:phone])], 0, true)]), x:convave], 2147483647, false), 1 ,x:xxxsentencexxx), SpanMultiTermQueryWrapper(x:/shap.{0,1}/)], 2147483647, false), 1 ,x:xxxsentencexxx) spanWithin(spanNear([spanWithin(spanNear([spanOr([spanNear([y:mobile, spanOr([SpanMultiTermQueryWrapper(y:/unit.{0,1}/), y:terminal])], 0, true), spanNear([y:cellular, spanOr([y:telephone, y:phone])], 0, true)]), y:convave], 2147483647, false), 1 ,y:xxxsentencexxx), SpanMultiTermQueryWrapper(y:/shap.{0,1}/)], 2147483647, false), 1 ,y:xxxsentencexxx)");
 
 	}
+
 	@Test
 	public void testFourXOrAdjOrTerms8() {
-	    test("(big XOU data) ADJ (rocks OU you).y.", "(-(spanNear([y:data, y:rocks], 0, true) spanNear([y:data, y:you], 0, true)) +(spanNear([y:big, y:rocks], 0, true) spanNear([y:big, y:you], 0, true))) (-(spanNear([y:big, y:rocks], 0, true) spanNear([y:big, y:you], 0, true)) +(spanNear([y:data, y:rocks], 0, true) spanNear([y:data, y:you], 0, true)))");
+		test("(big XOU data) ADJ (rocks OU you).y.",
+				"(-(spanNear([y:data, y:rocks], 0, true) spanNear([y:data, y:you], 0, true)) +(spanNear([y:big, y:rocks], 0, true) spanNear([y:big, y:you], 0, true))) (-(spanNear([y:big, y:rocks], 0, true) spanNear([y:big, y:you], 0, true)) +(spanNear([y:data, y:rocks], 0, true) spanNear([y:data, y:you], 0, true)))");
 	}
+
 	@Test
 	public void testThreeAndAdjTerms14() {
-		    test("(big E data) ADJ rocks", "+(spanNear([x:big, x:rocks], 0, true) spanNear([y:big, y:rocks], 0, true)) +(spanNear([x:data, x:rocks], 0, true) spanNear([y:data, y:rocks], 0, true))");
+		test("(big E data) ADJ rocks",
+				"+(spanNear([x:big, x:rocks], 0, true) spanNear([y:big, y:rocks], 0, true)) +(spanNear([x:data, x:rocks], 0, true) spanNear([y:data, y:rocks], 0, true))");
 	}
+
 	@Test
 	public void testThreeWithOrTerms13() {
-	    test("big COM (data OU rocks.x.)", "spanWithin(spanNear([x:big, x:data], 2147483647, false), 1 ,x:xxxsentencexxx) spanWithin(spanNear([y:big, y:data], 2147483647, false), 1 ,y:xxxsentencexxx) spanWithin(spanNear([x:big, x:rocks], 2147483647, false), 1 ,x:xxxsentencexxx)");
+		test("big COM (data OU rocks.x.)",
+				"spanWithin(spanNear([x:big, x:data], 2147483647, false), 1 ,x:xxxsentencexxx) spanWithin(spanNear([y:big, y:data], 2147483647, false), 1 ,y:xxxsentencexxx) spanWithin(spanNear([x:big, x:rocks], 2147483647, false), 1 ,x:xxxsentencexxx)");
 	}
+
 	@Test
 	public void testThreeSameOrTerms6() {
-	    test("(big MESMO data.y.) OU rocks.x.", "spanWithin(spanNear([y:big, y:data], 2147483647, false), 1 ,y:xxxparagraphxxx) x:rocks");
+		test("(big MESMO data.y.) OU rocks.x.",
+				"spanWithin(spanNear([y:big, y:data], 2147483647, false), 1 ,y:xxxparagraphxxx) x:rocks");
 	}
 
 	@Test
@@ -61,7 +93,7 @@ public class BrsTest extends SolrTestCaseJ4 {
 		test("(big PROX data) OU rocks",
 				"(spanNear([x:big, x:data], 0, false) spanNear([y:big, y:data], 0, false)) (x:rocks y:rocks)");
 	}
-	
+
 	@Test
 	public void testThreeWithXOrTerms11() {
 		test("(big COM data XOU rocks).x.",
@@ -115,21 +147,16 @@ public class BrsTest extends SolrTestCaseJ4 {
 	public void testClassificationRangePlusOr() {
 		test("(123/456-789,234).range.", "range:[123/456 TO 123/789] range:123/234");
 	}
-	
+
 	private void test(String in, String out) {
 		assertQ("", lquery(in), "//lst[@name='debug']/str[@name='parsedquery_toString' and text()='" + out + "']");
 	}
-	
-	 private void test(String q,int numFound) {
-		    assertQ(req("qt","brs",
-		      "debugQuery", "true",
-		      "q",q,
-		      "qf","x, y, z",
-		      "indent","true",
-		      "sm","xxxsentencexxx",
-		      "pm","xxxparagraphxxx"),"//*[@numFound='"+ Integer.toString(numFound) +"']");
-	 }
-	 
+
+	private void test(String q, int numFound) {
+		assertQ(req("qt", "brs", "debugQuery", "true", "q", q, "qf", "x, y, z", "indent", "true", "sm",
+				"xxxsentencexxx", "pm", "xxxparagraphxxx"), "//*[@numFound='" + Integer.toString(numFound) + "']");
+	}
+
 	private LocalSolrQueryRequest lquery(String q) {
 		HashMap<String, String> args = new HashMap<String, String>();
 		args.put("fl", "*");
@@ -142,23 +169,9 @@ public class BrsTest extends SolrTestCaseJ4 {
 		TestHarness.LocalRequestFactory sumLRF = h.getRequestFactory("brs", 0, 200, args);
 		return sumLRF.makeRequest(q);
 	}
-	@Ignore
-	private void hardTest(String input) {
-		SwanParser<String> _parser = Parboiled.createParser(SwanParser.class);
-		_parser.setSearcher(new StringStubSwanSearcher());
 
-		// input = "apple E banana PROX3 cocon*";
-		// input = "((mobile PROX (unit$1 OU terminal)) OU (cellular PROX (telephone OU
-		// phone))) COM convave COM shap$1";
-		ParsingResult<?> result = new RecoveringParseRunner<String>(_parser.Query()).run(input);
+	
+	
+	
 
-		if (result.hasErrors()) {
-			System.out.println("\nParse Errors:\n" + ErrorUtils.printParseErrors(result));
-		}
-
-		Object value = result.parseTreeRoot.getValue();
-		System.out.println(value);
-		// System.out.println(ParseTreeUtils.printNodeTree(result));
-
-	}
 }

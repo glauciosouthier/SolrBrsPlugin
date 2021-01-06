@@ -36,7 +36,9 @@
        affect both how text is indexed and queried.
   -->
   <luceneMatchVersion>8.7.0</luceneMatchVersion>
-<instanceDir>/mnt/sda1/opt/solr-8.7.0</instanceDir>
+
+    <!--   <instanceDir>/mnt/sda1/opt/solr-8.7.0</instanceDir> -->
+    
   <!-- <lib/> directives can be used to instruct Solr to load any Jars
        identified and use them to resolve any "plugins" specified in
        your solrconfig.xml or schema.xml (ie: Analyzers, Request
@@ -725,7 +727,7 @@
     -->
 
   <!-- Brs Solr Work -->
-   <queryParser name="brs" class="br.jus.brs.BrsQParserPlugin">
+   <queryParser name="brs" class="brs.components.BrsQParserPlugin">
     <str name="fieldAliases">fieldAliases.txt</str>
   </queryParser>
 
@@ -747,9 +749,9 @@
   </requestHandler>
 <!--
   <searchComponent class="solr.HighlightComponent" name="highlight">
-    <highlighting class="br.jus.brs.BrsHighlighter">
+    <highlighting class="brs.components.BrsHighlighter">
 -->
-  <searchComponent class="br.jus.brs.BrsHighlightComponent" name="highlight">
+  <searchComponent class="brs.components.BrsHighlightComponent" name="highlight">
     <highlighting>
       <!--<highlighting class="org.apache.solr.highlight.DefaultSolrHighlighter">-->
       <!--<highlighting class="org.apache.solr.highlight.PostingsSolrHighlighter">-->
@@ -785,7 +787,7 @@
 
       <!-- Configure the standard encoder -->
       <encoder name="html" class="solr.highlight.HtmlEncoder" default="true"/>
-      <encoder name="html_striper" class="br.jus.brs.BrsHtmlStriperEncoder" default="true"/>
+      <encoder name="html_striper" class="brs.components.BrsHtmlStriperEncoder" default="true"/>
       <encoder name="default" class="solr.highlight.DefaultEncoder" />
 
       <!-- Configure the standard fragListBuilder -->
@@ -1302,8 +1304,8 @@
   -->
 
   <!-- Term Vector Component http://wiki.apache.org/solr/TermVectorComponent -->
-  <!-- <searchComponent name="thComponent" class="br.jus.brs.BrsTermHighlightComponent"/> -->
-  <searchComponent name="thBrsComponent" class="br.jus.brs.BrsTermHighlightComponent"/>
+  <!-- <searchComponent name="thComponent" class="brs.components.BrsTermHighlightComponent"/> -->
+  <searchComponent name="thBrsComponent" class="brs.components.BrsTermHighlightComponent"/>
 
 
   <!-- A request handler for demonstrating the _term vector component This
