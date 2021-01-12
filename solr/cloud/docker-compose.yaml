@@ -25,7 +25,7 @@ services:
      - "8981:8983"
     environment:
       - ZK_HOST=zoo1:2181,zoo2:2181,zoo3:2181
-      - SOLR_HEAP=1024m
+ #     - SOLR_HEAP=1024m
     networks:
       - solr
     depends_on:
@@ -44,7 +44,7 @@ services:
      - "8982:8983"
     environment:
       - ZK_HOST=zoo1:2181,zoo2:2181,zoo3:2181
-      - SOLR_HEAP=1024m
+#      - SOLR_HEAP=1024m
     networks:
       - solr
     depends_on:
@@ -63,7 +63,7 @@ services:
      - "8983:8983"
     environment:
       - ZK_HOST=zoo1:2181,zoo2:2181,zoo3:2181
-      - SOLR_HEAP=1024m
+#      - SOLR_HEAP=1024m
     networks:
       - solr
     depends_on:
@@ -98,7 +98,7 @@ services:
     ports:
       - 2181:2181
     environment:
-      JVMFLAGS: "-Xmx512m"
+#      JVMFLAGS: "-Xmx512m"
       ZOO_MY_ID: 1
       ZOO_SERVERS: server.1=0.0.0.0:2888:3888;2181 server.2=zoo2:2888:3888;2181 server.3=zoo3:2888:3888;2181
     networks:
@@ -115,7 +115,7 @@ services:
     ports:
       - 2182:2181
     environment:
-      JVMFLAGS: "-Xmx512m"
+#      JVMFLAGS: "-Xmx512m"
       ZOO_MY_ID: 2
       ZOO_SERVERS: server.1=zoo1:2888:3888;2181 server.2=0.0.0.0:2888:3888;2181 server.3=zoo3:2888:3888;2181
     networks:
@@ -132,7 +132,7 @@ services:
     ports:
       - 2183:2181
     environment:
-      JVMFLAGS: "-Xmx512m"
+#      JVMFLAGS: "-Xmx512m"
       ZOO_MY_ID: 3
       ZOO_SERVERS: server.1=zoo1:2888:3888;2181 server.2=zoo2:2888:3888;2181 server.3=0.0.0.0:2888:3888;2181
     networks:
