@@ -14,7 +14,7 @@ services:
     - ./libs/:/mycores/juris/libs:rw
     - data:/var/solr/
    environment:
-   - SOLR_HEAP=4096m
+   - SOLR_HEAP=1024m
    command:
     - solr-precreate
     - juris
