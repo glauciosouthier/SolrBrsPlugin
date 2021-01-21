@@ -1,16 +1,16 @@
 version: '3'
 services:
   solr:
-   container_name: solr_juris  
+   container_name: core_juris  
    build:
-      context: .
-      dockerfile: ./Dockerfile  
+      context: ./
+      dockerfile: ./build/Dockerfile  
    ports:
     - "8983:8983"
    networks:
     - app-network
    volumes:
-    - ./juris/:/mycores/juris:rw
+    - ./core/juris/:/mycores/juris:rw
     - ./libs/:/mycores/juris/libs:rw
     - data:/var/solr/
    environment:

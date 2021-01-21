@@ -1,0 +1,66 @@
+
+version: '3'
+services:
+ 
+
+  solr1:
+    image: solr:8.7
+    container_name: solr1
+    hostname: solr1
+    ports:
+     - "8983:8983"
+    environment:
+      - ZK_HOST=zoo1:2181
+      - SOLR_HEAP=2018m
+    networks:
+      - solr
+    depends_on:
+      - zoo1
+    volumes:
+     - solr1data:/var/solr
+     - ../libs/:/mycores/juris/libs:rw
+
+  
+  create-collection:
+    build:
+      context: ./
+      dockerfile: build/Dockerfile
+    container_name: create-collection
+    environment:
+      - SOLR_HOST=solr1
+    networks:
+      - solr
+    volumes:
+      - ../core/juris/conf:/mycores/juris/:rw
+    command:
+      - bash
+      - "-e"
+      - "-x"
+      - "-c"
+      - "create-collection.sh -host $$SOLR_HOST -port 8983 -collection juris -shards 3 -replicas 1  "
+
+  zoo1:
+    image: zookeeper:3.6
+    container_name: zoo1
+    restart: always
+    hostname: zoo1
+    ports:
+      - 2181:2181
+    environment:
+      JVMFLAGS: "-Xmx1024m"
+      ZOO_MY_ID: 1
+      ZOO_SERVERS: server.1=0.0.0.0:2888:3888;2181
+    networks:
+      - solr
+    volumes:
+     - zoo1data:/data
+     - zoo1datalog:/datalog
+
+networks:
+  solr:
+
+volumes:
+  solr1data:
+  zoo1data:
+  zoo1datalog:
+  
