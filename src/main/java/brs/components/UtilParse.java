@@ -35,7 +35,7 @@ public class UtilParse {
 	private static final String FIELD_ALIASES_FILE_NAME = "fieldAliases.txt";
 	private static final String SCHEMA_FILE_NAME = "managed-schema";
 	private static final String CONFIG_FILE_NAME = "solrconfig.xml";
-	private static final String CORE_PATH = "solr/juris/conf/";
+	private static final String CORE_PATH = "solr/core/juris/conf/";
 	
 	public static String parseLucene(String query, HashMap<String, String> params) {
 		IndexSchema schema = null;

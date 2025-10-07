@@ -7,4 +7,7 @@ public class BrsHighlightComponent extends SwanHighlightComponent{
 	  public String getDescription() {
 	    return "BRS Highlighting";
 	  }
+	  public BrsHighlightComponent() {
+		  super();
+	  }
 }
